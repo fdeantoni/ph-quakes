@@ -1,0 +1,111 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons|Merriweather:400,400italic,700|Source+Sans+Pro:400,300,700);
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans);*/
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.5;
+}
+
+.list-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    width: 320px;
+    padding: 0;
+    font-size: .88em;
+    overflow-y: auto;
+}
+.list-container > h2 {
+    padding: 1em;
+}
+.list-view {
+    list-style-type: none;
+    padding: 0;
+}
+.list-view > li {
+    cursor: pointer;
+    box-sizing: border-box;
+    display: list-item;
+    font-size: 1em;
+    overflow-wrap: break-word;
+    text-align: left;
+    -moz-text-size-adjust: auto;
+    -webkit-text-size-adjust: auto;
+    margin: 0;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    list-style-position: inside;
+    padding: 0;
+}
+.list-item-container {
+    padding: 1em 1em 1em 4em;
+    position: relative;
+}
+.list-item-magnitude {
+    align-items: center;
+    bottom: .5em;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    left: .5em;
+    position: absolute;
+    top: .5em;
+    width: 3em
+}
+.list-item-location {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1em;
+    font-weight: 700;
+    margin: 0 0 0.1em;
+}
+.list-item-utc {
+    font-size: 0.9em;
+    font-weight: 400;
+    margin: 0;
+}
+.list-item-aside {
+    bottom: 1em;
+    overflow: hidden;
+    padding-left: 1.5em;
+    position: absolute;
+    right: 1em;
+    text-align: right;
+    white-space: nowrap;
+    font-size: .9em;
+}
+.list-item-selected {
+    border: 1px solid #888;
+    background-color: white;
+}
+.map-container {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 320px;
+    bottom: 0;
+    right: 0;
+}
+.leaflet-bottom.leaflet-left{
+    width: 100%;
+}
+.leaflet-control-container .leaflet-timeline-controls{
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 15px;
+}
+.fade-in {
+    animation: fadein 1s ease-in-out;
+    -webkit-animation: fadein 1s ease-in-out;
+    opacity: 1.0
+}
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
