@@ -1343,6 +1343,7 @@ dependencies = [
  "actix-web",
  "actix-web-static-files",
  "askama",
+ "chrono",
  "env_logger",
  "log",
  "openssl",

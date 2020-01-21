@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::str::Utf8Error;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct QuakeError {
@@ -49,6 +50,15 @@ impl From<actix_web::client::SendRequestError> for QuakeError {
 
 impl From<actix_web::client::PayloadError> for QuakeError {
     fn from(error: actix_web::client::PayloadError) -> Self {
+        QuakeError::new(format!(
+            "Client error occurred! {}",
+            error.to_string()
+        ))
+    }
+}
+
+impl From<std::str::Utf8Error> for QuakeError {
+    fn from(error: Utf8Error) -> Self {
         QuakeError::new(format!(
             "Client error occurred! {}",
             error.to_string()
