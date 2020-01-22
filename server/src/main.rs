@@ -44,10 +44,9 @@ async fn main() -> std::io::Result<()> {
 
     info!("Loading initial quake data from philvolcs...");
     let quakes = get_quakes().await;
-    let actor: Addr<cache::CacheActor> = cache::CacheActor::default().start();
-
-    actor.do_send(UpdateCache(quakes.last().unwrap().clone()));
-
+    let actor = cache::CacheActor::create(|ctx| {
+        cache::CacheActor::new(quakes)
+    });
     let data = web::Data::new(actor);
 
     HttpServer::new(move || {
