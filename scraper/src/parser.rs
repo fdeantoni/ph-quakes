@@ -120,12 +120,12 @@ impl HtmlParser {
         }
     }
 
-    fn get_magnitude(row: &HashMap<String, String>) -> Result<f32, ScraperError> {
+    fn get_magnitude(row: &HashMap<String, String>) -> Result<f64, ScraperError> {
         let text = row.get("Mag");
         if text.is_some() {
             let value = text.unwrap();
-            value.parse::<f32>().map_err(|error| {
-                ScraperError::new(format!("Trouble converting {} to f32: {}", value, error.to_string()))
+            value.parse::<f64>().map_err(|error| {
+                ScraperError::new(format!("Trouble converting {} to f64: {}", value, error.to_string()))
             })
         } else {
             Err(ScraperError::new("Mag not found in row!"))

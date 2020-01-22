@@ -843,6 +843,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "geojson"
+version = "0.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e4ac03428b3276fc7f1756eba0c76c7c0c91ef77e1c43fbdd47a460238419cb9"
+dependencies = [
+ "num-traits",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "getopts"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1429,7 +1440,9 @@ checksum = "9a1574a51c3fd37b26d2c0032b649d08a7d51d4cca9c41bbc5bf7118fa4509d0"
 name = "quakes-api"
 version = "0.1.0"
 dependencies = [
+ "actix-rt",
  "chrono",
+ "geojson",
  "serde",
  "serde_derive",
  "serde_json",
