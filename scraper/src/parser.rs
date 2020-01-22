@@ -146,6 +146,18 @@ impl HtmlParser {
         }
     }
 
+    fn get_depth(row: &HashMap<String, String>) -> Result<u16, ScraperError> {
+        let text = row.get("Depth");
+        if text.is_some() {
+            let value = text.unwrap();
+            value.parse::<u16>().map_err(|error| {
+                ScraperError::new(format!("Trouble converting {} to i8: {}", value, error.to_string()))
+            })
+        } else {
+            Err(ScraperError::new("Depth not found in row!"))
+        }
+    }
+
     fn get_location(row: &HashMap<String, String>) -> Result<String, ScraperError> {
         let text = row.get("Location");
         if text.is_some() {
@@ -182,6 +194,7 @@ impl HtmlParser {
             let longitude = Self::get_longitude(&row)?;
             let latitude = Self::get_latitude(&row)?;
             let magnitude = Self::get_magnitude(&row)?;
+            let depth = Self::get_depth(&row)?;
             let location = Self::get_location(&row)?;
             let province = Self::get_province(&row)?;
             let url = Self::get_url(&row)?;
@@ -191,6 +204,7 @@ impl HtmlParser {
                 longitude,
                 latitude,
                 magnitude,
+                depth,
                 location,
                 province,
                 url

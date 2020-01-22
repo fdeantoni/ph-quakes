@@ -17,8 +17,8 @@ L.tileLayer(mapboxUrl, mapboxConfig).addTo(mymap);
 function updateList(layer, bounded = true) {
 
     const displayed = layer.getLayers().sort(function(a,b) {
-        const first = moment(a.feature.properties.datetime_utc);
-        const second = moment(b.feature.properties.datetime_utc);
+        const first = moment(a.feature.properties.datetime);
+        const second = moment(b.feature.properties.datetime);
         return second - first;
     });
     document.getElementById('displayed-list').innerHTML = "";
@@ -84,7 +84,6 @@ function currentMarkers(json) {
     return L.geoJSON(json, {
         pointToLayer: function(feature, latlng) {
             if (feature.properties) {
-                let size = feature.properties.radius*2;
                 return new L.marker(latlng, {
                     icon: markerIcon(20,1),
                     zIndexOffset: 1000
@@ -98,7 +97,7 @@ function currentMarkers(json) {
 function filterOld(json) {
     const horizon = moment().subtract(24, 'hours').utc();
     const filtered = json.features.filter(function(item) {
-        return moment.utc(item.properties.datetime_utc).isAfter(horizon);
+        return moment.utc(item.properties.datetime).isAfter(horizon);
     });
     return {
         type: "FeatureCollection",
@@ -200,11 +199,11 @@ fetch("quakes.json")
 
         let control = L.control.layers(baseLayers).addTo(mymap);
 
-        const test = {"type":"Feature","properties":{"datetime_utc":"2020-01-20 13:14:00","latitude":13.86,"longitude":121.03,"depth":31,"magnitude":1.8,"location":"002 km S 82° E of Test","province":"Batangas","url":"https://earthquake.phivolcs.dost.gov.ph/2020_Earthquake_Information/January/2020_0118_0514_B1.html","start":"2020-01-20 13:14:00","end":"2020-01-21 13:14:00","radius":7.0,"opacity":0.3879233182605155,"label":"Mag: 1.8 / Depth: 31"},"geometry":{"type":"Point","coordinates":[121.03,13.86]}};
-        json.features.push(test);
-        updateCurrent(current, json);
-        control.removeLayer(history);
-        history = loadHistory(mymap, json);
-        control.addBaseLayer(history, "History");
+        // const test = {"type":"Feature","properties":{"datetime_utc":"2020-01-20 13:14:00","latitude":13.86,"longitude":121.03,"depth":31,"magnitude":1.8,"location":"002 km S 82° E of Test","province":"Batangas","url":"https://earthquake.phivolcs.dost.gov.ph/2020_Earthquake_Information/January/2020_0118_0514_B1.html","start":"2020-01-20 13:14:00","end":"2020-01-21 13:14:00","radius":7.0,"opacity":0.3879233182605155,"label":"Mag: 1.8 / Depth: 31"},"geometry":{"type":"Point","coordinates":[121.03,13.86]}};
+        // json.features.push(test);
+        // updateCurrent(current, json);
+        // control.removeLayer(history);
+        // history = loadHistory(mymap, json);
+        // control.addBaseLayer(history, "History");
 
     });
