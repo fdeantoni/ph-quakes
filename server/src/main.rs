@@ -1,10 +1,11 @@
 use actix_web::{App, HttpServer, Responder, HttpResponse, web, Result};
-use actix_files::NamedFile;
 use actix_web_static_files;
 use askama::Template;
 
 use std::collections::HashMap;
-use std::path::PathBuf;
+
+use quakes_api::*;
+use quakes_scraper;
 
 include!(concat!(env!("OUT_DIR"), "/generated.rs"));
 
@@ -17,9 +18,10 @@ async fn index() -> impl Responder {
     HttpResponse::Ok().content_type("text/html").body(body)
 }
 
-async fn history() -> Result<NamedFile> {
-    let path = PathBuf::from("quakes.json");
-    Ok(NamedFile::open(path)?)
+async fn history() -> impl Responder {
+    let quakes = quakes_scraper::get_philvolcs_quakes().await.unwrap();
+    let geojson = QuakeList::new(quakes).to_geojson().await;
+    web::Json(geojson)
 }
 
 #[actix_rt::main]

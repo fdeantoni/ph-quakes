@@ -1470,6 +1470,9 @@ dependencies = [
  "askama",
  "env_logger",
  "log",
+ "quakes-api",
+ "quakes-scraper",
+ "serde",
 ]
 
 [[package]]

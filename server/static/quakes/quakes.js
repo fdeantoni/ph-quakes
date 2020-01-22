@@ -96,7 +96,7 @@ function currentMarkers(json) {
 }
 
 function filterOld(json) {
-    const horizon = moment().subtract(96, 'hours').utc();
+    const horizon = moment().subtract(24, 'hours').utc();
     const filtered = json.features.filter(function(item) {
         return moment.utc(item.properties.datetime_utc).isAfter(horizon);
     });
