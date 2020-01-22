@@ -48,7 +48,7 @@ impl Quake {
         }
     }
 
-    pub fn to_geojso_featuren(&self) -> Feature {
+    pub fn to_geojson_feature(&self) -> Feature {
         let geometry = Geometry::new(
             Value::Point(vec![self.longitude, self.latitude])
         );
@@ -116,7 +116,7 @@ impl QuakeList {
     pub async fn to_geojson(&self) -> FeatureCollection {
         let bbox = None;
         let foreign_members = None;
-        let features: Vec<Feature> = self.0.iter().map(|quake| quake.to_geojso_featuren()).collect();
+        let features: Vec<Feature> = self.0.iter().map(|quake| quake.to_geojson_feature()).collect();
         FeatureCollection {
                  bbox,
                  features,
@@ -184,7 +184,7 @@ mod tests {
     #[test]
     fn geojson_conversion() {
         let quake = test_quake();
-        let feature = quake.to_geojso_featuren();
+        let feature = quake.to_geojson_feature();
         let geojson = GeoJson::Feature(feature);
         println!("{}", geojson.to_string());
     }
