@@ -262,7 +262,6 @@ dependencies = [
  "log",
  "mime",
  "net2",
- "openssl",
  "pin-project",
  "regex",
  "serde",
@@ -524,6 +523,7 @@ checksum = "31850b4a4d6bae316f7a09e691c944c28299298837edc0a03f755618c23cbc01"
 dependencies = [
  "num-integer",
  "num-traits",
+ "serde",
  "time",
 ]
 
@@ -1335,22 +1335,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "philvolcs-quakes"
-version = "0.1.0"
-dependencies = [
- "actix-files",
- "actix-rt",
- "actix-web",
- "actix-web-static-files",
- "askama",
- "chrono",
- "env_logger",
- "log",
- "openssl",
- "scraper",
-]
-
-[[package]]
 name = "pin-project"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1440,6 +1424,40 @@ name = "procedural-masquerade"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a1574a51c3fd37b26d2c0032b649d08a7d51d4cca9c41bbc5bf7118fa4509d0"
+
+[[package]]
+name = "quakes-api"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_derive",
+ "serde_json",
+]
+
+[[package]]
+name = "quakes-scraper"
+version = "0.1.0"
+dependencies = [
+ "actix-rt",
+ "awc",
+ "openssl",
+ "quakes-api",
+ "scraper",
+]
+
+[[package]]
+name = "quakes-server"
+version = "0.1.0"
+dependencies = [
+ "actix-files",
+ "actix-rt",
+ "actix-web",
+ "actix-web-static-files",
+ "askama",
+ "env_logger",
+ "log",
+]
 
 [[package]]
 name = "quick-error"

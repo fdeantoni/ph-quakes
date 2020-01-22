@@ -3,9 +3,6 @@ use actix_files::NamedFile;
 use actix_web_static_files;
 use askama::Template;
 
-mod history;
-mod error;
-
 use std::collections::HashMap;
 use std::path::PathBuf;
 
