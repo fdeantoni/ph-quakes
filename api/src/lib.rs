@@ -113,15 +113,16 @@ impl QuakeList {
     pub fn new(vec: Vec<Quake>) -> QuakeList {
         QuakeList(vec.into_boxed_slice())
     }
-    pub async fn to_geojson(&self) -> FeatureCollection {
+    pub async fn to_geojson(&self) -> GeoJson {
         let bbox = None;
         let foreign_members = None;
         let features: Vec<Feature> = self.0.iter().map(|quake| quake.to_geojson_feature()).collect();
-        FeatureCollection {
+        GeoJson::FeatureCollection(FeatureCollection {
                  bbox,
                  features,
                  foreign_members,
             }
+        )
     }
 }
 

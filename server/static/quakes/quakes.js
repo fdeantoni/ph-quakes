@@ -54,8 +54,8 @@ function updateList(layer, bounded = true) {
 }
 
 function markerPopup(feature, layer) {
-    // does this feature have a property named popupContent?
-    if (feature.properties && feature.properties.label) {
+    console.log(feature);
+    if (feature.properties) {
         const props = feature.properties;
         const header = '<h3>' + props.province + ' ' + props.longitude + ', ' + props.latitude + '</h3>';
         const details = '<ul style="list-style-type:none;padding-left: 0;">' +
@@ -185,25 +185,23 @@ function loadHistory(map, json) {
     return timeline;
 }
 
-fetch("quakes.json")
-    .then(response => response.json())
-    .then(json => {
+function loadData(json) {
+    let current = loadCurrent(mymap, json);
+    let history = loadHistory(mymap, json);
 
-        let current = loadCurrent(mymap, json);
-        let history = loadHistory(mymap, json);
+    let baseLayers = {
+        "Current": current,
+        "History": history
+    };
 
-        let baseLayers = {
-            "Current": current,
-            "History": history
-        };
+    let control = L.control.layers(baseLayers).addTo(mymap);
 
-        let control = L.control.layers(baseLayers).addTo(mymap);
+    // const test = {"type":"Feature","properties":{"datetime":"2020-01-22T03:39:00Z","latitude":13.86,"longitude":121.03,"depth":31,"magnitude":1.8,"location":"002 km S 82° E of Test","province":"Batangas","url":"https://earthquake.phivolcs.dost.gov.ph/2020_Earthquake_Information/January/2020_0118_0514_B1.html","start":"2020-01-20 13:14:00","end":"2020-01-21 13:14:00","radius":7.0,"opacity":0.3879233182605155},"geometry":{"type":"Point","coordinates":[121.03,13.86]}};
+    // json.features.push(test);
+    // updateCurrent(current, json);
+    // control.removeLayer(history);
+    // history = loadHistory(mymap, json);
+    // control.addBaseLayer(history, "History");
+}
 
-        // const test = {"type":"Feature","properties":{"datetime_utc":"2020-01-20 13:14:00","latitude":13.86,"longitude":121.03,"depth":31,"magnitude":1.8,"location":"002 km S 82° E of Test","province":"Batangas","url":"https://earthquake.phivolcs.dost.gov.ph/2020_Earthquake_Information/January/2020_0118_0514_B1.html","start":"2020-01-20 13:14:00","end":"2020-01-21 13:14:00","radius":7.0,"opacity":0.3879233182605155,"label":"Mag: 1.8 / Depth: 31"},"geometry":{"type":"Point","coordinates":[121.03,13.86]}};
-        // json.features.push(test);
-        // updateCurrent(current, json);
-        // control.removeLayer(history);
-        // history = loadHistory(mymap, json);
-        // control.addBaseLayer(history, "History");
 
-    });

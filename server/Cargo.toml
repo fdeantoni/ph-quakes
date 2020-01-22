@@ -7,13 +7,18 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+actix = "0.9.0"
+actix-codec = "0.2.0"
 actix-web = "2.0"
+actix-web-actors = "2.0"
 actix-web-static-files = "0.3"
 actix-files = "0.2"
 actix-rt = "1.0"
 askama = "0.8"
 log = "0.4"
 env_logger = "0.7"
+futures = "0.3.1"
+bytes = "0.5.3"
 serde = { version = "1.0", features = ["derive"] }
 quakes-api = { path = "../api" }
 quakes-scraper = { path = "../scraper" }

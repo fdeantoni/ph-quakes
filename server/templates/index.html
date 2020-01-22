@@ -27,5 +27,12 @@
     <div class="map-container" id="mapid"></div>
 
     <script type='text/javascript' src='/static/quakes/quakes.js'></script>
+    <script>
+        fetch("quakes.json")
+            .then(response => response.json())
+            .then(json => {
+                loadData(json);
+            });
+    </script>
 </body>
 </html>
