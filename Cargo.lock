@@ -1456,6 +1456,7 @@ dependencies = [
  "awc",
  "openssl",
  "quakes-api",
+ "regex",
  "scraper",
 ]
 

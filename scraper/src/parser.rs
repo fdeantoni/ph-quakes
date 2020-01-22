@@ -56,7 +56,9 @@ impl HtmlParser {
                             row.insert("Date - Time".to_string(), format!("{} +08", text));
                         } else if header.eq("Location") {
                             let text: String = Self::sanitize_text(td.text()).join("");
-                            row.insert("Location".to_string(), text);
+                            let (location, province) = Self::find_province(text);
+                            row.insert("Location".to_string(), location);
+                            row.insert("Province".to_string(), province);
                         } else if header.eq("Mag") {
                             let text = Self::sanitize_text(td.text())
                                 .last().cloned().unwrap_or("error");
@@ -79,6 +81,18 @@ impl HtmlParser {
             .into_iter().map(|string| string.trim() )
             .filter(|string| !string.is_empty() )
             .collect()
+    }
+
+    fn find_province(text: String) -> (String, String) {
+        match text.rfind("(") {
+            Some(pos) => {
+                let len = text.len();
+                let province = &text[pos+1..len-1];
+                let location = &text[0..pos-1];
+                (location.to_string(), province.to_string())
+            },
+            None => (text, String::new())
+        }
     }
 
     fn get_datetime(row: &HashMap<String, String>) -> Result<DateTime<Utc>, ScraperError> {
@@ -141,6 +155,15 @@ impl HtmlParser {
         }
     }
 
+    fn get_province(row: &HashMap<String, String>) -> Result<String, ScraperError> {
+        let text = row.get("Province");
+        if text.is_some() {
+            Ok(text.unwrap().clone())
+        } else {
+            Err(ScraperError::new("province not found in row!"))
+        }
+    }
+
     fn get_url(row: &HashMap<String, String>) -> Result<String, ScraperError> {
         let text = row.get("url");
         if text.is_some() {
@@ -160,6 +183,7 @@ impl HtmlParser {
             let latitude = Self::get_latitude(&row)?;
             let magnitude = Self::get_magnitude(&row)?;
             let location = Self::get_location(&row)?;
+            let province = Self::get_province(&row)?;
             let url = Self::get_url(&row)?;
 
             let quake = Quake::new(
@@ -168,6 +192,7 @@ impl HtmlParser {
                 latitude,
                 magnitude,
                 location,
+                province,
                 url
             );
             quakes.push(quake);
@@ -243,6 +268,14 @@ mod tests {
         row.insert(header, dt_string);
         let dt = HtmlParser::get_datetime(&row).unwrap();
         println!("{:?}", dt);
+    }
+
+    #[test]
+    fn parse_province() {
+        let text = "10km N 47° E of Cabanglasan (Bukidnon)".to_string();
+        let (location, province) = HtmlParser::find_province(text);
+        println!("{:?}", location);
+        println!("{:?}", province);
     }
 
 }
