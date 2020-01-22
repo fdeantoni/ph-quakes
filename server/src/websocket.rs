@@ -4,16 +4,17 @@ use actix_web::{web, Error, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
 use log::*;
 
+use quakes_api::*;
+
+use crate::cache;
+
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 /// How long before lack of client response causes a timeout
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 
-/// websocket connection is long running connection, it easier
-/// to handle with an actor
 struct WsActor {
-    /// Client must send ping at least once per 10 seconds (CLIENT_TIMEOUT),
-    /// otherwise we drop connection.
+    cache: Addr<cache::CacheActor>,
     hb: Instant,
 }
 
@@ -24,6 +25,18 @@ impl Actor for WsActor {
     fn started(&mut self, ctx: &mut Self::Context) {
         debug!("Websocket actor started...");
         self.hb(ctx);
+        let addr = ctx.address().recipient();
+        self.cache.do_send(cache::Connect {
+                addr,
+            });
+    }
+
+    fn stopped(&mut self, ctx: &mut Self::Context) {
+        debug!("Websocket has stopped.");
+        let addr = ctx.address().recipient();
+        self.cache.do_send(cache::Disconnect {
+            addr
+        })
     }
 }
 
@@ -55,8 +68,11 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsActor {
 }
 
 impl WsActor {
-    fn new() -> Self {
-        Self { hb: Instant::now() }
+    fn new(cache_addr: Addr<cache::CacheActor>) -> Self {
+        Self {
+            cache: cache_addr,
+            hb: Instant::now()
+        }
     }
 
     /// helper method that sends ping to client every second.
@@ -81,9 +97,24 @@ impl WsActor {
     }
 }
 
-pub(crate) async fn index(r: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct CacheUpdates(pub QuakeList);
+
+impl Handler<CacheUpdates> for WsActor {
+    type Result = ();
+
+    fn handle(&mut self, msg: CacheUpdates, ctx: &mut Self::Context) -> Self::Result {
+        debug!("Received a new quake to send to client...");
+        let quakes = msg.0.to_geojson();
+        ctx.text(quakes.to_string());
+    }
+}
+
+pub(crate) async fn index(r: HttpRequest, stream: web::Payload, cache: web::Data<Addr<cache::CacheActor>>) -> Result<HttpResponse, Error> {
     debug!("{:?}", r);
-    let res = ws::start(WsActor::new(), &r, stream);
+    let cache_addr= cache.get_ref().clone();
+    let res = ws::start(WsActor::new(cache_addr), &r, stream);
     debug!("{:?}", res);
     res
 }

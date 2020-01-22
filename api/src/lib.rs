@@ -104,6 +104,7 @@ impl Quake {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct QuakeList(Box<[Quake]>);
 
 impl QuakeList {
@@ -113,7 +114,7 @@ impl QuakeList {
     pub fn new(vec: Vec<Quake>) -> QuakeList {
         QuakeList(vec.into_boxed_slice())
     }
-    pub async fn to_geojson(&self) -> GeoJson {
+    pub fn to_geojson(&self) -> GeoJson {
         let bbox = None;
         let foreign_members = None;
         let features: Vec<Feature> = self.0.iter().map(|quake| quake.to_geojson_feature()).collect();
@@ -194,7 +195,7 @@ mod tests {
     async fn retrieve_philvolcs_quakes() {
         let quake = test_quake();
         let list = QuakeList::new(vec![quake]);
-        let geojson = list.to_geojson().await;
+        let geojson = list.to_geojson();
         println!("{}", geojson.to_string());
     }
 }

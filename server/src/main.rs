@@ -1,3 +1,4 @@
+use actix::*;
 use actix_web::{App, HttpServer, Responder, HttpResponse, web};
 use actix_web_static_files;
 use askama::Template;
@@ -8,8 +9,10 @@ use quakes_api::*;
 use quakes_scraper;
 use std::sync::Mutex;
 use log::info;
+use crate::cache::UpdateCache;
 
 mod websocket;
+mod cache;
 
 include!(concat!(env!("OUT_DIR"), "/generated.rs"));
 
@@ -27,9 +30,8 @@ async fn history(features: web::Data<Mutex<GeoJson>>) -> impl Responder {
     web::Json(geojson.clone())
 }
 
-async fn get_quakes() -> GeoJson {
-    let quakes = quakes_scraper::get_philvolcs_quakes().await.unwrap();
-    QuakeList::new(quakes).to_geojson().await
+async fn get_quakes() -> Vec<Quake> {
+    quakes_scraper::get_philvolcs_quakes().await.unwrap()
 }
 
 #[actix_rt::main]
@@ -42,7 +44,11 @@ async fn main() -> std::io::Result<()> {
 
     info!("Loading initial quake data from philvolcs...");
     let quakes = get_quakes().await;
-    let data = web::Data::new(Mutex::new(quakes));
+    let actor: Addr<cache::CacheActor> = cache::CacheActor::default().start();
+
+    actor.do_send(UpdateCache(quakes.last().unwrap().clone()));
+
+    let data = web::Data::new(actor);
 
     HttpServer::new(move || {
         let generated = generate();
