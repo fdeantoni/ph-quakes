@@ -7,7 +7,6 @@ use std::collections::HashMap;
 
 use quakes_api::*;
 use quakes_scraper;
-use std::sync::Mutex;
 use log::info;
 
 mod websocket;

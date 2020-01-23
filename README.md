@@ -1,4 +1,4 @@
-# *Philvolcs Quakes* #
+# *PH Quakes* #
 
 The Philippines is in the [Ring of Fire](https://en.wikipedia.org/wiki/Ring_of_Fire) so earthquakes and
 volcano eruptions are a frequent occurrence. [PHILVOLCS](https://en.wikipedia.org/wiki/Philippine_Institute_of_Volcanology_and_Seismology) keeps
@@ -13,17 +13,17 @@ map. It emulates the functionality the [USGS Earthquake Map](https://earthquake.
 To run the application you will need [Rust](https://www.rust-lang.org/). Install that first. After that, run
 the following:
 
-    $ git clone https://github.com/fdeantoni/philvolcs-quakes
-    $ cd philvolcs-quakes/server
+    $ git clone https://github.com/fdeantoni/ph-quakes
+    $ cd ph-quakes/server
     $ cargo run 
 
 ## License ##
 
-`philvolcs-quakes` is distributed under the terms of the Apache License (Version 2.0).
+`ph-quakes` is distributed under the terms of the Apache License (Version 2.0).
 
 See [LICENSE](LICENSE) for details.
 
-Copyright 2019 Ferdinand de Antoni
+Copyright 2020 Ferdinand de Antoni
 
 ## Disclaimer ##
 
