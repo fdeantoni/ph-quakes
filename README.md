@@ -1,7 +1,7 @@
 # *PH Quakes* #
 
 The Philippines is in the [Ring of Fire](https://en.wikipedia.org/wiki/Ring_of_Fire) so earthquakes and
-volcano eruptions are a frequent occurrence. [PHILVOLCS](https://en.wikipedia.org/wiki/Philippine_Institute_of_Volcanology_and_Seismology) keeps
+volcano eruptions are a frequent occurrence. [PHIVOLCS](https://en.wikipedia.org/wiki/Philippine_Institute_of_Volcanology_and_Seismology) keeps
 track of all these and publishes earthquake data on its [website](https://www.phivolcs.dost.gov.ph/index.php/earthquake/earthquake-information3), 
 and [twitter account](https://twitter.com/phivolcs_dost).
 
@@ -27,4 +27,4 @@ Copyright 2020 Ferdinand de Antoni
 
 ## Disclaimer ##
 
-This is not an officially supported product of PHILVOLCS-DOST and is developed purely for educational purposes.
+This is not an officially supported product of PHIVOLCS-DOST and is developed purely for educational purposes.
