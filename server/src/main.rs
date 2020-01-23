@@ -24,9 +24,10 @@ async fn index() -> impl Responder {
     HttpResponse::Ok().content_type("text/html").body(body)
 }
 
-async fn history(features: web::Data<Mutex<GeoJson>>) -> impl Responder {
-    let geojson = &*features.lock().unwrap();
-    web::Json(geojson.clone())
+async fn history() -> impl Responder {
+    let quakes = get_quakes().await;
+    let geojson = QuakeList::new(quakes);
+    web::Json(geojson.to_geojson())
 }
 
 async fn get_quakes() -> Vec<Quake> {
