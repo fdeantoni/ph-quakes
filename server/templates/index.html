@@ -28,11 +28,19 @@
 
     <script type='text/javascript' src='/static/quakes/quakes.js'></script>
     <script>
-        fetch("quakes.json")
-            .then(response => response.json())
-            .then(json => {
+        const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
+        const socket = new WebSocket(wsUri);
+        let loaded = false;
+        socket.addEventListener('message', function (event) {
+            const json = JSON.parse(event.data);
+            console.log('Message from server ', json);
+            if(!loaded) {
                 loadData(json);
-            });
+                loaded = true;
+            } else {
+                updateData(json);
+            }
+        });
     </script>
 </body>
 </html>

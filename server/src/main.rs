@@ -9,7 +9,6 @@ use quakes_api::*;
 use quakes_scraper;
 use std::sync::Mutex;
 use log::info;
-use crate::cache::UpdateCache;
 
 mod websocket;
 mod cache;
@@ -44,7 +43,7 @@ async fn main() -> std::io::Result<()> {
 
     info!("Loading initial quake data from philvolcs...");
     let quakes = get_quakes().await;
-    let actor = cache::CacheActor::create(|ctx| {
+    let actor = cache::CacheActor::create(|_| {
         cache::CacheActor::new(quakes)
     });
     let data = web::Data::new(actor);

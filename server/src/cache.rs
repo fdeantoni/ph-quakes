@@ -29,12 +29,6 @@ impl CacheActor {
     }
 }
 
-impl Default for CacheActor {
-    fn default() -> Self {
-        CacheActor::new(Vec::new())
-    }
-}
-
 #[derive(Message)]
 #[rtype(result = "()")]
 pub struct UpdateCache(pub Quake);
