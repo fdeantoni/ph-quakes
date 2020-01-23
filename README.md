@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/fdeantoni/ph-quakes.svg?branch=master)](https://travis-ci.org/fdeantoni/ph-quakes)
+[![Dependency Status](https://deps.rs/repo/github/fdeantoni/ph-quakes/status.svg)](https://deps.rs/repo/github/fdeantoni/ph-quakes)
+
 # *PH Quakes* #
 
 The Philippines is in the [Ring of Fire](https://en.wikipedia.org/wiki/Ring_of_Fire) so earthquakes and

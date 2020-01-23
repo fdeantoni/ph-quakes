@@ -15,7 +15,7 @@ impl WebClient {
 
     pub async fn retrieve(&self, url: String) -> Result<String, ScraperError> {
         let mut response = self.0.get(url)
-            .header("User-Agent", "philvolcs-quakes")
+            .header("User-Agent", "ph-quakes")
             .send().await?;
 
         let length = response.headers().get("content-length")
