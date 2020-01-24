@@ -4,6 +4,14 @@ pub mod parser;
 use awc;
 use std::borrow::Cow;
 use std::str::Utf8Error;
+use crate::client::TwitterClient;
+
+const PHIVOLCS_SCREEN_NAME: &str = "phivolcs_dost";
+
+pub struct TwitterQuakes {
+    client: TwitterClient,
+    last_tweet_id: u64
+}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TwitterError {

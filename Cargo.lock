@@ -1567,6 +1567,9 @@ dependencies = [
  "env_logger",
  "openssl",
  "quakes-api",
+ "serde",
+ "serde_derive",
+ "serde_json",
 ]
 
 [[package]]
