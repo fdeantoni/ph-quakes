@@ -1,6 +1,6 @@
 let mymap = L.map('mapid', {
     center: [12.5, 120.91],
-    zoom: 6,
+    zoom: 5,
     maxZoom: 18
 });
 
@@ -54,7 +54,6 @@ function updateList(layer, bounded = true) {
 }
 
 function markerPopup(feature, layer) {
-    console.log(feature);
     if (feature.properties) {
         const props = feature.properties;
         const header = '<h3>' + props.province + ' ' + props.longitude + ', ' + props.latitude + '</h3>';
@@ -95,7 +94,7 @@ function currentMarkers(json) {
 }
 
 function filterOld(json) {
-    const horizon = moment().subtract(24, 'hours').utc();
+    const horizon = moment().utc().subtract(24, 'hours');
     const filtered = json.features.filter(function(item) {
         return moment.utc(item.properties.datetime).isAfter(horizon);
     });

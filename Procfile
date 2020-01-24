@@ -1,1 +1,1 @@
-web: ./server/target/release/quakes-server
+web: ./target/release/quakes-server

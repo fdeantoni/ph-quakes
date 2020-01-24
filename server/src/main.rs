@@ -44,11 +44,14 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=info");
+        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=debug,quakes_twitter=debug");
     }
     env_logger::init();
 
-    info!("Loading initial quake data from philvolcs...");
+    let host = std::env::var("HOST").unwrap_or("127.0.0.1".to_string());
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+
+    info!("Loading initial quake data from phivolcs...");
     let quakes = get_quakes().await;
     let cache = cache::CacheActor::create(|_| {
         cache::CacheActor::new(quakes)
@@ -86,7 +89,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/ws/").route(web::get().to(websocket::index)))
             .route("/quakes.json", web::get().to(history))
     })
-        .bind("127.0.0.1:8080")?
+        .bind(format!("{}:{}", host, port))?
         .run()
         .await
 }

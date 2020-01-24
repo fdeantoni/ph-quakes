@@ -19,13 +19,6 @@ impl Actor for CacheActor {
 
 impl CacheActor {
 
-    fn update(&mut self, mut quakes: Vec<Quake>) -> Vec<Quake> {
-        quakes.retain(|quake| !self.quakes.contains(quake) );
-        debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
-        self.quakes.extend(quakes.clone());
-        quakes
-    }
-
     pub fn new(quakes: Vec<Quake>) -> CacheActor {
         let sessions = Vec::new();
         CacheActor { quakes, sessions }
@@ -40,11 +33,19 @@ impl Handler<UpdateCache> for CacheActor {
     type Result = ();
 
     fn handle(&mut self, msg: UpdateCache, _: &mut Self::Context) -> Self::Result {
-        debug!("Received cache updates:\n{:#?}", &msg.0);
-        let quakes = self.update( msg.0.clone());
-        let list = QuakeList::new(quakes);
-        for session in self.sessions.iter() {
-            session.do_send(websocket::CacheUpdates(list.clone())).unwrap();
+        let mut quakes = msg.0.clone();
+        debug!("Current cache size: {}", &self.quakes.len());
+        debug!("Updates:\n{:#?}", &quakes);
+        quakes.retain(|quake| !self.quakes.contains(quake) );
+        debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
+        self.quakes.extend(quakes.clone());
+        //let quakes = self.update( msg.0.clone());
+        if !quakes.is_empty() {
+            let list = QuakeList::new(quakes);
+            debug!("Sending to clients:\n{:#?}", &list);
+            for session in self.sessions.iter() {
+                session.do_send(websocket::CacheUpdates(list.clone())).unwrap();
+            }
         }
     }
 }

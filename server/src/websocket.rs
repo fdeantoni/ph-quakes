@@ -57,11 +57,9 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsActor {
             }
             Ok(ws::Message::Text(text)) => {
                 debug!("WS Text: {:?}", &text);
-                ctx.text(text)
             },
-            Ok(ws::Message::Binary(bin)) => {
+            Ok(ws::Message::Binary(_)) => {
                 debug!("WS Binary");
-                ctx.binary(bin)
             },
             Ok(ws::Message::Close(_)) => {
                 ctx.stop();
@@ -109,7 +107,7 @@ impl Handler<CacheUpdates> for WsActor {
     type Result = ();
 
     fn handle(&mut self, msg: CacheUpdates, ctx: &mut Self::Context) -> Self::Result {
-        debug!("Received a new quakes to send to client...");
+        debug!("Received new quakes to send to client...");
         let quakes = msg.0.to_geojson();
         ctx.text(quakes.to_string());
     }
