@@ -49,8 +49,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
 
     info!("Loading initial quake data from philvolcs...");
-    //let quakes = get_quakes().await;
-    let quakes = Vec::new();
+    let quakes = get_quakes().await;
     let cache = cache::CacheActor::create(|_| {
         cache::CacheActor::new(quakes)
     });
@@ -63,7 +62,7 @@ async fn main() -> std::io::Result<()> {
     spawn(async move {
         let cache = cache.clone();
         info!("Will update quakes from twitter every 5 minutes...");
-        let start = clock::Instant::now() + Duration::from_secs(300);
+        let start = clock::Instant::now() + Duration::from_secs(60);
         let mut interval = interval_at(start, Duration::from_secs(300));
         let mut quakes = TwitterQuakes::new(key, secret);
         loop {

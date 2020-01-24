@@ -55,7 +55,7 @@ impl HtmlParser {
                                 .last().cloned().unwrap_or("error");
                             row.insert("Date - Time".to_string(), format!("{} +08", text));
                         } else if header.eq("Location") {
-                            let text: String = Self::sanitize_text(td.text()).join("");
+                            let text: String = Self::sanitize_text(td.text()).join(" ");
                             let (location, province) = Self::find_province(text);
                             row.insert("Location".to_string(), location);
                             row.insert("Province".to_string(), province);

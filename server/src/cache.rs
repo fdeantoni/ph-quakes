@@ -19,7 +19,9 @@ impl Actor for CacheActor {
 
 impl CacheActor {
 
-    fn update(&mut self, quakes: Vec<Quake>) {
+    fn update(&mut self, mut quakes: Vec<Quake>) {
+        quakes.retain(|quake| !self.quakes.contains(quake) );
+        debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
         self.quakes.extend(quakes)
     }
 
