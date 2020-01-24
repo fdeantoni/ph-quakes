@@ -161,7 +161,8 @@ impl TweetParser {
 
     fn get_url(text: Option<String>) -> Result<String, TwitterError> {
         if text.is_some() {
-            Ok(text.unwrap().clone())
+            let url = text.unwrap().replace("http://", "https://");
+            Ok(url)
         } else {
             Err(TwitterError::new("URL not found in tweet!"))
         }
