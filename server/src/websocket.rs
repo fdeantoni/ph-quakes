@@ -109,7 +109,7 @@ impl Handler<CacheUpdates> for WsActor {
     type Result = ();
 
     fn handle(&mut self, msg: CacheUpdates, ctx: &mut Self::Context) -> Self::Result {
-        debug!("Received a new quake to send to client...");
+        debug!("Received a new quakes to send to client...");
         let quakes = msg.0.to_geojson();
         ctx.text(quakes.to_string());
     }

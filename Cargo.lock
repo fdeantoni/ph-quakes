@@ -1549,11 +1549,13 @@ dependencies = [
  "actix-web-static-files",
  "askama",
  "bytes",
+ "dotenv",
  "env_logger",
  "futures",
  "log",
  "quakes-api",
  "quakes-scraper",
+ "quakes-twitter",
  "serde",
 ]
 
@@ -1565,6 +1567,7 @@ dependencies = [
  "awc",
  "dotenv",
  "env_logger",
+ "log",
  "openssl",
  "quakes-api",
  "serde",

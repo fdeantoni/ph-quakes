@@ -1,3 +1,4 @@
+use log::*;
 use awc;
 use openssl::ssl::{SslConnector, SslMethod};
 use std::time::Duration;
@@ -5,7 +6,7 @@ use serde_derive::*;
 use crate::TwitterError;
 
 #[derive(Clone)]
-pub struct TwitterClient {
+pub(crate) struct TwitterClient {
     url: String,
     client: awc::Client,
     key: String,
@@ -20,17 +21,17 @@ struct TokenResponse {
 }
 
 #[derive(Debug,Clone,Deserialize)]
-pub struct Url {
+pub(crate) struct Url {
     expanded_url: String
 }
 
 #[derive(Debug,Clone,Deserialize)]
-pub struct Entities {
+pub(crate) struct Entities {
     urls: Vec<Url>,
 }
 
 #[derive(Debug,Clone,Deserialize)]
-pub struct Tweet {
+pub(crate) struct Tweet {
     created_at: String,
     id: u64,
     full_text: String,
@@ -43,6 +44,9 @@ impl Tweet {
     }
     pub fn get_url(&self) -> Option<String> {
         self.entities.urls.last().into_iter().map(|url| url.expanded_url.clone()).last()
+    }
+    pub fn get_tweet_id(&self) -> u64 {
+        self.id
     }
 }
 
@@ -94,6 +98,8 @@ impl TwitterClient {
 
         let tweets: Vec<Tweet> = serde_json::from_str(string).unwrap();
 
+        debug!("Tweets retrieved:\n{:#?}", &tweets);
+
         Ok(tweets)
     }
 
@@ -119,7 +125,7 @@ impl TwitterClient {
 }
 
 #[cfg(test)]
-pub mod tests {
+pub(crate) mod tests {
     use super::*;
     use dotenv::*;
     use std::env;
@@ -167,7 +173,7 @@ pub mod tests {
         println!("Url: {:?}", tweets[0].get_url());
     }
 
-    const TWEET_TEXT: &str = r#"#EarthquakePH #EarthquakeSarangani\nEarthquake Information No.1\nDate and Time: 24 Jan 2020 - 07:21 AM\nMagnitude = 2.3\nDepth = 026 kilometers\nLocation = 06.44N, 125.22E - 019 km N 11° W of Malungon (Sarangani)\n\nhttps://t.co/LzMZu5Gb5t"#;
+    const TWEET_TEXT: &str = "#EarthquakePH #EarthquakeSarangani\nEarthquake Information No.1\nDate and Time: 24 Jan 2020 - 07:21 AM\nMagnitude = 2.3\nDepth = 026 kilometers\nLocation = 06.44N, 125.22E - 019 km N 11° W of Malungon (Sarangani)\n\nhttps://t.co/LzMZu5Gb5t";
 
     pub(crate) fn get_test_tweet() -> Tweet {
         Tweet {

@@ -1,3 +1,4 @@
+use log::*;
 use crate::client::Tweet;
 use quakes_api::*;
 use std::collections::HashMap;
@@ -5,7 +6,7 @@ use crate::TwitterError;
 
 const DATETIME_FORMAT: &str = "%d %B %Y - %I:%M %p %#z";
 
-pub struct TweetParser(Vec<Tweet>);
+pub(crate) struct TweetParser(Vec<Tweet>);
 
 impl TweetParser {
 
@@ -47,7 +48,7 @@ impl TweetParser {
     }
 
     fn parse_text(text: String) -> HashMap<String, String> {
-        let strings: Vec<&str> = text.split("\\n").collect();
+        let strings: Vec<&str> = text.split("\n").collect();
         let mut map: HashMap<String, String> = HashMap::new();
         for string in strings {
             if let Some(datetime) =  Self::capture(string.to_string(), "Date and Time: ".to_string()) {
@@ -166,34 +167,39 @@ impl TweetParser {
         }
     }
 
-    async fn get_quakes(&self) -> Result<Vec<Quake>, TwitterError> {
+    pub(crate) async fn get_quakes(&self) -> Result<Vec<Quake>, TwitterError> {
         let mut quakes: Vec<Quake> = Vec::new();
 
         for tweet in self.0.clone() {
 
-            let row = Self::parse_text(tweet.get_text());
+            if tweet.get_text().starts_with("#EarthquakePH") {
+                let row = Self::parse_text(tweet.get_text());
 
-            let datetime = Self::get_datetime(&row)?;
-            let longitude = Self::get_longitude(&row)?;
-            let latitude = Self::get_latitude(&row)?;
-            let magnitude = Self::get_magnitude(&row)?;
-            let depth = Self::get_depth(&row)?;
-            let location = Self::get_location(&row)?;
-            let province = Self::get_province(&row)?;
-            let url = Self::get_url(tweet.get_url())?;
+                let datetime = Self::get_datetime(&row)?;
+                let longitude = Self::get_longitude(&row)?;
+                let latitude = Self::get_latitude(&row)?;
+                let magnitude = Self::get_magnitude(&row)?;
+                let depth = Self::get_depth(&row)?;
+                let location = Self::get_location(&row)?;
+                let province = Self::get_province(&row)?;
+                let url = Self::get_url(tweet.get_url())?;
 
-            let quake = Quake::new(
-                datetime,
-                longitude,
-                latitude,
-                magnitude,
-                depth,
-                location,
-                province,
-                url
-            );
-            quakes.push(quake);
+                let quake = Quake::new(
+                    datetime,
+                    longitude,
+                    latitude,
+                    magnitude,
+                    depth,
+                    location,
+                    province,
+                    url
+                );
+                quakes.push(quake);
+            } else {
+                debug!("Tweet {} missing #Earthquake tag, skipping:\n{:#?}", &tweet.get_tweet_id(), &tweet);
+            }
         }
+
         Ok(quakes)
     }
 
@@ -206,7 +212,7 @@ impl TweetParser {
 mod tests {
     use super::*;
 
-    const TWEET_TEXT: &str = r#"#EarthquakePH #EarthquakeSarangani\nEarthquake Information No.1\nDate and Time: 24 Jan 2020 - 07:21 AM\nMagnitude = 2.3\nDepth = 026 kilometers\nLocation = 06.44N, 125.22E - 019 km N 11° W of Malungon (Sarangani)\n\nhttps://t.co/LzMZu5Gb5t"#;
+    const TWEET_TEXT: &str = "#EarthquakePH #EarthquakeSarangani\nEarthquake Information No.1\nDate and Time: 24 Jan 2020 - 07:21 AM\nMagnitude = 2.3\nDepth = 026 kilometers\nLocation = 06.44N, 125.22E - 019 km N 11° W of Malungon (Sarangani)\n\nhttps://t.co/LzMZu5Gb5t";
 
     #[test]
     fn parse_tweet_text() {
@@ -223,5 +229,4 @@ mod tests {
         let quakes = parser.get_quakes().await.unwrap();
         println!("{:#?}", quakes);
     }
-
 }
