@@ -206,7 +206,7 @@ function loadData(json) {
 function updateData(json) {
     geojson_data.features.concat(json.features);
     updateCurrent(current_layer, geojson_data);
-    history_control.removeLayer(history);
+    history_control.removeLayer(history_layer);
     history_layer = loadHistory(mymap, geojson_data);
     history_control.addBaseLayer(history_layer, "History");
 }
