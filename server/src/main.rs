@@ -74,7 +74,7 @@ async fn main() -> std::io::Result<()> {
                 error!("An error occurred retrieving quake tweets: {}", error.to_string());
                 Vec::new()
             });
-            info!("Collected {} new earthquake tweets from twitter...", updates.len());
+            info!("Collected {} new quake tweets from twitter: {:#?}", &updates.len(), &updates);
             if !updates.is_empty() {
                 cache.do_send(UpdateCache(updates))
             }

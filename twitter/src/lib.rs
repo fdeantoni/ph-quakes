@@ -20,7 +20,8 @@ impl TwitterQuakes {
 
     async fn process(&mut self, tweets: Vec<Tweet>) -> Result<Vec<Quake>, TwitterError> {
         if !tweets.is_empty() {
-            self.last_tweet_id = tweets.last().unwrap().get_tweet_id();
+            // tweets come in latest == first and oldest == last!
+            self.last_tweet_id = tweets.first().unwrap().get_tweet_id();
         }
         let parser = TweetParser::new(tweets);
         parser.get_quakes().await
