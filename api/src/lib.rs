@@ -102,6 +102,25 @@ impl Quake {
             foreign_members: None,
         }
     }
+
+    pub fn find_province(text: String) -> (String, String) {
+        match text.rfind("(") {
+            Some(pos) => {
+                let len = text.len();
+                let province = &text[pos+1..len-1];
+                let location = &text[0..pos-1];
+                (location.to_string(), province.to_string())
+            },
+            None => {
+                let location = text.clone();
+                let mut province = "";
+                if let Some(pos) = text.rfind("of ") {
+                    province = &text[pos+3..text.len()]
+                }
+                (location, province.to_string())
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

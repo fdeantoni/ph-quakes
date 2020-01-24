@@ -19,10 +19,11 @@ impl Actor for CacheActor {
 
 impl CacheActor {
 
-    fn update(&mut self, mut quakes: Vec<Quake>) {
+    fn update(&mut self, mut quakes: Vec<Quake>) -> Vec<Quake> {
         quakes.retain(|quake| !self.quakes.contains(quake) );
         debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
-        self.quakes.extend(quakes)
+        self.quakes.extend(quakes.clone());
+        quakes
     }
 
     pub fn new(quakes: Vec<Quake>) -> CacheActor {
@@ -40,8 +41,7 @@ impl Handler<UpdateCache> for CacheActor {
 
     fn handle(&mut self, msg: UpdateCache, _: &mut Self::Context) -> Self::Result {
         debug!("Received cache updates:\n{:#?}", &msg.0);
-        let quakes = msg.0;
-        self.update(quakes.clone());
+        let quakes = self.update( msg.0.clone());
         let list = QuakeList::new(quakes);
         for session in self.sessions.iter() {
             session.do_send(websocket::CacheUpdates(list.clone())).unwrap();

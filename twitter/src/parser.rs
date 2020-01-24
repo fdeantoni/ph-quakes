@@ -21,17 +21,8 @@ impl TweetParser {
         }
     }
 
-    //noinspection DuplicatedCode
     fn find_province(text: String) -> (String, String) {
-        match text.rfind("(") {
-            Some(pos) => {
-                let len = text.len();
-                let province = &text[pos+1..len-1];
-                let location = &text[0..pos-1];
-                (location.to_string(), province.to_string())
-            },
-            None => (text, String::new())
-        }
+        Quake::find_province(text)
     }
 
     fn find_latlng(text: String) -> (String, String) {

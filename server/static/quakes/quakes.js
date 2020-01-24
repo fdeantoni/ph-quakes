@@ -30,7 +30,7 @@ function updateList(layer, bounded = true) {
             const html = '<li data-layer-id="'+ layerId + '">' +
                 '<div class="list-item-container">' +
                 '<span class="list-item-magnitude">' + props.magnitude + '</span>' +
-                '<h1 class="list-item-location">' + props.location + '</h1>' +
+                '<h1 class="list-item-location">' + props.province + '</h1>' +
                 '<h2 class="list-item-utc">' + props.start + '</h2>' +
                 '<aside class="list-item-aside">' + props.depth + ' km</aside>' +
                 '</div></li>';
@@ -61,7 +61,7 @@ function markerPopup(feature, layer) {
         const details = '<ul style="list-style-type:none;padding-left: 0;">' +
             '<li><b>Magnitude: </b>' + props.magnitude + '</li>' +
             '<li><b>Depth:     </b>' + props.depth + '</li>' +
-            '<li><b>Location   </b>' + props.location + '</li>' +
+            '<li><b>Location:  </b>' + props.location + '</li>' +
             '<li><b>Source:    </b><a href="'+ props.url +'" target="_blank">philvolcs</li>' +
             '</ul>';
         layer.bindPopup(header + details);

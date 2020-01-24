@@ -44,7 +44,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=debug,quakes_twitter=debug");
+        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=info");
     }
     env_logger::init();
 
