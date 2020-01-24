@@ -1,3 +1,5 @@
+use log::*;
+use dotenv::*;
 use actix::*;
 use actix::clock::*;
 use actix_web::{App, HttpServer, Responder, HttpResponse, web};
@@ -9,8 +11,6 @@ use std::collections::HashMap;
 
 use quakes_api::*;
 use quakes_scraper;
-use log::info;
-use dotenv::*;
 use quakes_twitter::TwitterQuakes;
 use crate::cache::UpdateCache;
 
@@ -44,7 +44,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=debug,quakes_twitter=debug");
+        std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=info");
     }
     env_logger::init();
 
@@ -70,11 +70,12 @@ async fn main() -> std::io::Result<()> {
         let mut quakes = TwitterQuakes::new(key, secret);
         loop {
             interval.tick().await;
-            if !quakes.has_started() {
-                let updates = quakes.start().await.unwrap();
-                cache.do_send(UpdateCache(updates))
-            } else {
-                let updates = quakes.next().await.unwrap();
+            let updates = quakes.get_tweets().await.unwrap_or_else(|error| {
+                error!("An error occurred retrieving quake tweets: {}", error.to_string());
+                Vec::new()
+            });
+            info!("Collected {} new earthquake tweets from twitter...", updates.len());
+            if !updates.is_empty() {
                 cache.do_send(UpdateCache(updates))
             }
         }

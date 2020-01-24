@@ -29,19 +29,41 @@
 
     <script type='text/javascript' src='/static/quakes/quakes.js'></script>
     <script>
-        const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
-        const socket = new WebSocket(wsUri);
-        let loaded = false;
-        socket.addEventListener('message', function (event) {
-            const json = JSON.parse(event.data);
-            console.log('Message from server ', json);
-            if(!loaded) {
-                loadData(json);
-                loaded = true;
-            } else {
-                updateData(json);
-            }
-        });
+
+        function connect() {
+            const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
+            let ws = new WebSocket(wsUri);
+            let loaded = false;
+            ws.onopen = function() {
+                // TODO: set config here.
+            };
+
+            ws.onmessage = function(e) {
+                const json = JSON.parse(event.data);
+                console.log('Message from server ', json);
+                if(!loaded) {
+                    loadData(json);
+                    loaded = true;
+                } else {
+                    updateData(json);
+                }
+            };
+
+            ws.onclose = function(e) {
+                console.log('Socket is closed. Reconnect will be attempted in 10 seconds.', e.reason);
+                setTimeout(function() {
+                    connect();
+                }, 10000);
+            };
+
+            ws.onerror = function(err) {
+                console.error('Socket encountered error: ', err.message, 'Closing socket');
+                ws.close();
+            };
+        }
+
+        connect();
+
     </script>
 </body>
 </html>

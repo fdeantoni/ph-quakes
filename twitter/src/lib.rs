@@ -26,22 +26,30 @@ impl TwitterQuakes {
         parser.get_quakes().await
     }
 
-    pub fn has_started(&self) -> bool {
+    fn has_started(&self) -> bool {
         self.last_tweet_id > 0
     }
 
-    pub async fn start(&mut self) -> Result<Vec<Quake>, TwitterError> {
+    async fn start(&mut self) -> Result<Vec<Quake>, TwitterError> {
         let screen_name = PHIVOLCS_SCREEN_NAME.to_string();
         let last_tweet_id = None;
         let tweets = self.client.timeline(screen_name, last_tweet_id).await?;
         self.process(tweets).await
     }
 
-    pub async fn next(&mut self) -> Result<Vec<Quake>, TwitterError> {
+    async fn next(&mut self) -> Result<Vec<Quake>, TwitterError> {
         let screen_name = PHIVOLCS_SCREEN_NAME.to_string();
         let last_tweet_id = Some(self.last_tweet_id);
         let tweets = self.client.timeline(screen_name, last_tweet_id).await?;
         self.process(tweets).await
+    }
+
+    pub async fn get_tweets(&mut self) -> Result<Vec<Quake>, TwitterError> {
+        if !self.has_started() {
+            self.start().await
+        } else {
+            self.next().await
+        }
     }
 
     pub fn new(key: String, secret: String) -> Self {
