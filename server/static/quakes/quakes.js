@@ -27,8 +27,9 @@ function updateList(layer, bounded = true) {
     displayed.forEach(function(quake){
         const layerId = layer.getLayerId(quake);
         const props = quake.feature.properties;
+        const isNew = moment(props.datetime).isAfter(lastTimestamp);
         let fade = "";
-        if(moment(props.datetime).isAfter(lastTimestamp)) {
+        if(isNew) {
             fade = " fade-in list-item-new";
         }
         const inBounds = mymap.getBounds().contains({lat: props.latitude, lng: props.longitude});
@@ -48,8 +49,6 @@ function updateList(layer, bounded = true) {
         let lastItem = displayed[0];
         lastTimestamp = moment(lastItem.feature.properties.datetime);
     }
-
-    console.log("Last layer timestamp ", lastTimestamp.toISOString());
 
     $('.list-view > li').click(function(e) {
         $('.list-view > li').removeClass('list-item-selected');
