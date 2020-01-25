@@ -29,7 +29,7 @@ function updateList(layer, bounded = true) {
         const props = quake.feature.properties;
         let fade = "";
         if(moment(props.datetime).isAfter(lastTimestamp)) {
-            fade = " fade-in";
+            fade = " fade-in list-item-new";
         }
         const inBounds = mymap.getBounds().contains({lat: props.latitude, lng: props.longitude});
         if( !bounded || (bounded && inBounds) ) {
