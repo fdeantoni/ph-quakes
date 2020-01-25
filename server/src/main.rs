@@ -38,6 +38,12 @@ async fn get_quakes() -> Vec<Quake> {
     quakes_scraper::get_philvolcs_quakes().await.unwrap()
 }
 
+fn dummy_quakes() -> Vec<Quake> {
+    vec![
+        Quake::new(Utc::now(), 125.71, 9.15, 1.0, 1, "TEST".to_string(), "TEST".to_string(), "https://example.com".to_string()),
+    ]
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
 
@@ -51,29 +57,40 @@ async fn main() -> std::io::Result<()> {
     let host = std::env::var("HOST").unwrap_or("127.0.0.1".to_string());
     let port = std::env::var("PORT").unwrap_or("8080".to_string());
 
-    info!("Loading initial quake data from phivolcs...");
-    let quakes = get_quakes().await;
+    let is_test = std::env::var("TEST").is_ok();
+    if is_test {
+        info!("Using dummy quakes for updates!");
+    } else {
+        info!("Loading initial quake data from phivolcs...");
+    }
+
+    let quakes = if !is_test { get_quakes().await } else { dummy_quakes() };
     let cache = cache::CacheActor::create(|_| {
         cache::CacheActor::new(quakes)
     });
 
+    let data = web::Data::new(cache.clone());
+
     let key = std::env::var("TWITTER_KEY").expect("Missing Twitter key");
     let secret = std::env::var("TWITTER_SECRET").expect("Missing Twitter secret");
 
-    let data = web::Data::new(cache.clone());
-
     spawn(async move {
         let cache = cache.clone();
-        info!("Will update quakes from twitter every 5 minutes...");
         let start = clock::Instant::now() + Duration::from_secs(60);
-        let mut interval = interval_at(start, Duration::from_secs(300));
+        let i = if !is_test { 300 } else { 10 };
+        let mut interval = interval_at(start, Duration::from_secs(i));
+        info!("Will update quakes from twitter every {} seconds...", i);
         let mut quakes = TwitterQuakes::new(key, secret);
         loop {
             interval.tick().await;
-            let updates = quakes.get_tweets().await.unwrap_or_else(|error| {
-                error!("An error occurred retrieving quake tweets: {}", error.to_string());
-                Vec::new()
-            });
+            let updates = if !is_test {
+                quakes.get_tweets().await.unwrap_or_else(|error| {
+                    error!("An error occurred retrieving quake tweets: {}", error.to_string());
+                    Vec::new()
+                })
+            } else {
+                dummy_quakes()
+            };
             info!("Collected {} new quake tweets from twitter: {:#?}", &updates.len(), &updates);
             if !updates.is_empty() {
                 cache.do_send(UpdateCache(updates))

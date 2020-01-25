@@ -14,6 +14,8 @@ const mapboxConfig = {
 
 L.tileLayer(mapboxUrl, mapboxConfig).addTo(mymap);
 
+let lastTimestamp = moment.unix(0).utc();
+
 function updateList(layer, bounded = true) {
 
     const displayed = layer.getLayers().sort(function(a,b) {
@@ -25,10 +27,14 @@ function updateList(layer, bounded = true) {
     displayed.forEach(function(quake){
         const layerId = layer.getLayerId(quake);
         const props = quake.feature.properties;
+        let fade = "";
+        if(moment(props.datetime).isAfter(lastTimestamp)) {
+            fade = " fade-in";
+        }
         const inBounds = mymap.getBounds().contains({lat: props.latitude, lng: props.longitude});
         if( !bounded || (bounded && inBounds) ) {
             const html = '<li data-layer-id="'+ layerId + '">' +
-                '<div class="list-item-container">' +
+                '<div class="list-item-container' + fade + '">' +
                 '<span class="list-item-magnitude">' + props.magnitude + '</span>' +
                 '<h1 class="list-item-location">' + props.province + '</h1>' +
                 '<h2 class="list-item-utc">' + props.start + '</h2>' +
@@ -37,6 +43,13 @@ function updateList(layer, bounded = true) {
             $('#displayed-list').append(html);
         }
     });
+
+    if(displayed.length > 0) {
+        let lastItem = displayed[0];
+        lastTimestamp = moment(lastItem.feature.properties.datetime);
+    }
+
+    console.log("Last layer timestamp ", lastTimestamp.toISOString());
 
     $('.list-view > li').click(function(e) {
         $('.list-view > li').removeClass('list-item-selected');
@@ -203,7 +216,7 @@ function loadData(json) {
 }
 
 function updateData(json) {
-    geojson_data.features.concat(json.features);
+    geojson_data.features = geojson_data.features.concat(json.features);
     updateCurrent(current_layer, geojson_data);
     history_control.removeLayer(history_layer);
     history_layer = loadHistory(mymap, geojson_data);

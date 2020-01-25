@@ -40,7 +40,7 @@
 
             ws.onmessage = function(e) {
                 const json = JSON.parse(event.data);
-                console.log('Message from server ', json);
+                console.log('New quakes ', json);
                 if(!loaded) {
                     loadData(json);
                     loaded = true;
