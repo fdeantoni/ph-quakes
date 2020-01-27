@@ -13,16 +13,16 @@ function updateList(layer) {
         const props = quake.feature.properties;
         const newItem = document.createElement('li');
         newItem.setAttribute("data-layer-id", layerId);
-        newItem.innerHTML = '<div class="list-item-container">' +
-            '<span class="list-item-magnitude">' + props.magnitude + '</span>' +
-            '<h1 class="list-item-location">' + props.province + '</h1>' +
-            '<h2 class="list-item-utc">' + props.start + '</h2>' +
-            '<aside class="list-item-aside">' + props.depth + ' km</aside>' +
+        newItem.innerHTML = '<div class="quake-container">' +
+            '<span class="quake-magnitude">' + props.magnitude + '</span>' +
+            '<h1 class="quake-location">' + props.province + '</h1>' +
+            '<h2 class="quake-utc">' + props.start + '</h2>' +
+            '<aside class="quake-aside">' + props.depth + ' km</aside>' +
             '</div>';
 
         newItem.onclick = function(e) {
-            $('.list-view > li').removeClass('list-item-selected');
-            $(this).addClass('list-item-selected');
+            $('.list-view > li').removeClass('quake-selected');
+            $(this).addClass('quake-selected');
             mymap.flyTo(quake.getLatLng(), 14);
             mymap.once('moveend', function() {
                 let parent = quake.__parent;
@@ -45,7 +45,7 @@ function updateList(layer) {
         list.prepend(newItem);
 
         setTimeout(function() {
-            newItem.className = newItem.className + "show";
+            newItem.className = newItem.className + "quake-show";
         }, 10);
 
     });

@@ -7,16 +7,37 @@ body, html {
     line-height: 1.5;
 }
 
-.info-container {
+.quake-sidebar {
+    width: 335px;
     position: fixed;
     top: 0;
     left: 0;
     right: auto;
     bottom: 0;
-    width: 320px;
+    padding: 0;
+    overflow-y: auto;
+    display: block;
+}
+
+.quake-sidebar > div.quake-sidebar-tab  {
+    width: 15px;
+    transform: rotate(90deg);
     padding: 0;
     font-size: .88em;
-    overflow-y: auto;
+    margin-left: 320px;
+}
+
+.quake-sidebar > div.info-container  {
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*right: auto;*/
+    /*bottom: 0;*/
+    /*padding: 0;*/
+    font-size: .88em;
+    /*overflow-y: auto;*/
+    width: 320px;
+    float: left;
 }
 
 .info-header {
@@ -27,14 +48,14 @@ body, html {
 }
 
 .info-header > h1 {
-    display:table-cell;
+    display: table-cell;
     vertical-align: middle;
     font-size: 1.5em;
 }
 
 .info-header > a {
     padding: 0 0 0 0.5em;
-    display:table-cell;
+    display: table-cell;
     vertical-align:middle;
     font-weight: bold;
 }
@@ -43,34 +64,20 @@ body, html {
 /*     List CSS      */
 /*********************/
 
-.list-view {
+.quake-list {
     list-style: none;
     padding: 0;
 }
 
-.fade li {
+.quake-fade li {
     transition: all 0.4s ease-out;
     opacity: 0;
 }
-.fade li.show {
+.quake-fade li.quake-show {
     opacity: 1;
 }
 
-.swing {
-    perspective: 200px;
-}
-.swing li {
-    opacity: 0;
-    transform: rotateX(-90deg);
-    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-}
-.swing li.show {
-    opacity: 1;
-    transform: none;
-    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-}
-
-.highlight li.show {
+.quake-highlight li.quake-show {
     animation: fadeout 4s normal;
     -webkit-animation: fadeout 4s normal;
     background-color: white;
@@ -81,11 +88,11 @@ body, html {
     }
 }
 
-.list-item-container {
+.quake-container {
     padding: 0.75em 0.5em 0.75em 4em;
     position: relative;
 }
-.list-item-magnitude {
+.quake-magnitude {
     align-items: center;
     bottom: .5em;
     display: flex;
@@ -97,7 +104,7 @@ body, html {
     top: .5em;
     width: 3em
 }
-.list-item-location {
+.quake-location {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -105,12 +112,12 @@ body, html {
     font-weight: 700;
     margin: 0 0 0.1em;
 }
-.list-item-utc {
+.quake-utc {
     font-size: 0.9em;
     font-weight: 400;
     margin: 0;
 }
-.list-item-aside {
+.quake-aside {
     bottom: 1em;
     overflow: hidden;
     padding-left: 1.5em;
@@ -120,7 +127,7 @@ body, html {
     white-space: nowrap;
     font-size: .9em;
 }
-.list-item-selected {
+.quake-selected {
     border: 1px solid #888;
     background-color: white;
 }
@@ -133,7 +140,7 @@ body, html {
     display: block;
     position: absolute;
     top: 0;
-    left: 320px;
+    left: 335px;
     bottom: 0;
     right: 0;
 }

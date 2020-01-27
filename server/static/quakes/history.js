@@ -13,20 +13,20 @@ function updateList(layer, bounded = true) {
         const props = quake.feature.properties;
         const inBounds = mymap.getBounds().contains({lat: props.latitude, lng: props.longitude});
         if( !bounded || (bounded && inBounds) ) {
-            const html = '<li data-layer-id="'+ layerId + '" class="show">' +
-                '<div class="list-item-container">' +
-                '<span class="list-item-magnitude">' + props.magnitude + '</span>' +
-                '<h1 class="list-item-location">' + props.province + '</h1>' +
-                '<h2 class="list-item-utc">' + props.start + '</h2>' +
-                '<aside class="list-item-aside">' + props.depth + ' km</aside>' +
+            const html = '<li data-layer-id="'+ layerId + '" class="quake-show">' +
+                '<div class="quake-container">' +
+                '<span class="quake-magnitude">' + props.magnitude + '</span>' +
+                '<h1 class="quake-location">' + props.province + '</h1>' +
+                '<h2 class="quake-utc">' + props.start + '</h2>' +
+                '<aside class="quake-aside">' + props.depth + ' km</aside>' +
                 '</div></li>';
             $('#displayed-list').append(html);
         }
     });
 
     $('.list-view > li').click(function(e) {
-        $('.list-view > li').removeClass('list-item-selected');
-        $(this).addClass('list-item-selected');
+        $('.list-view > li').removeClass('quake-selected');
+        $(this).addClass('quake-selected');
         const marker = layer.getLayer($(this).attr('data-layer-id'));
         mymap.flyTo(marker.getLatLng(), 14);
         marker.openPopup();
