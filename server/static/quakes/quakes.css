@@ -7,11 +7,7 @@ body, html {
     line-height: 1.5;
 }
 
-/*********************/
-/*     List CSS      */
-/*********************/
-
-.list-container {
+.info-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -23,9 +19,28 @@ body, html {
     overflow-y: auto;
 }
 
-.list-container > h2 {
-    padding: 1em;
+.info-header {
+    padding: 1em 0 0 1em;
+    margin-bottom: 0;
+    text-align: center;
+    display: block;
 }
+
+.info-header > h1 {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.info-header > a {
+    padding: 0 0 0 0.5em;
+    display:table-cell;
+    vertical-align:middle;
+    font-weight: bold;
+}
+
+/*********************/
+/*     List CSS      */
+/*********************/
 
 .list-view {
     list-style: none;
