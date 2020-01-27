@@ -80,8 +80,8 @@ function markerPopup(feature, layer) {
 }
 
 function markerIcon(size, text) {
-    const style = "width: " + size + "px; height: " + size + "px; line-height: " + size + "px; background-image: url('/static/quakes/quake.png'); text-align: center; background-size: 100%; margin-top: 0px;";
-    const html = '<div style="'+ style +'"><b style="color:whitesmoke;">' + text + '</b></div>';
+    const style = "width: " + size + "px; height: " + size + "px; line-height: " + size + "px;";
+    const html = '<div class="quakes-icon" style="'+ style +'"><b style="color:whitesmoke;">' + text + '</b></div>';
     return L.divIcon({ html: html, className: 'mycluster', iconSize: L.point(size, size) });
 }
 

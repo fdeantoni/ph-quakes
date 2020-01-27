@@ -7,6 +7,13 @@ body, html {
     line-height: 1.5;
 }
 
+.quakes-icon {
+    background-image: url('quake.png');
+    text-align: center;
+    background-size: 100%;
+    margin-top: 0;
+}
+
 .list-container {
     position: fixed;
     top: 0;
