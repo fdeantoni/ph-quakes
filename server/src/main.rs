@@ -28,7 +28,16 @@ async fn index() -> impl Responder {
     HttpResponse::Ok().content_type("text/html").body(body)
 }
 
+#[derive(Template)]
+#[template(path = "history.html")]
+struct History;
+
 async fn history() -> impl Responder {
+    let body = History.render().unwrap();
+    HttpResponse::Ok().content_type("text/html").body(body)
+}
+
+async fn quakes_json() -> impl Responder {
     let quakes = get_quakes().await;
     let geojson = QuakeList::new(quakes);
     web::Json(geojson.to_geojson())
@@ -105,7 +114,8 @@ async fn main() -> std::io::Result<()> {
             .service(actix_web_static_files::ResourceFiles::new("/static", generated))
             .service(web::resource("/").route(web::get().to(index)))
             .service(web::resource("/ws/").route(web::get().to(websocket::index)))
-            .route("/quakes.json", web::get().to(history))
+            .service(web::resource("/history").route(web::get().to(history)))
+            .route("/quakes.json", web::get().to(quakes_json))
     })
         .bind(format!("{}:{}", host, port))?
         .run()

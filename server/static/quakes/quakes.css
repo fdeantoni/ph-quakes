@@ -7,12 +7,9 @@ body, html {
     line-height: 1.5;
 }
 
-.quakes-icon {
-    background-image: url('quake.png');
-    text-align: center;
-    background-size: 100%;
-    margin-top: 0;
-}
+/*********************/
+/*     List CSS      */
+/*********************/
 
 .list-container {
     position: fixed;
@@ -25,30 +22,51 @@ body, html {
     font-size: .88em;
     overflow-y: auto;
 }
+
 .list-container > h2 {
     padding: 1em;
 }
+
 .list-view {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
 }
-.list-view > li {
-    cursor: pointer;
-    box-sizing: border-box;
-    display: list-item;
-    font-size: 1em;
-    overflow-wrap: break-word;
-    text-align: left;
-    -moz-text-size-adjust: auto;
-    -webkit-text-size-adjust: auto;
-    margin: 0;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    list-style-position: inside;
-    padding: 0;
+
+.fade li {
+    transition: all 0.4s ease-out;
+    opacity: 0;
 }
+.fade li.show {
+    opacity: 1;
+}
+
+.swing {
+    perspective: 200px;
+}
+.swing li {
+    opacity: 0;
+    transform: rotateX(-90deg);
+    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+}
+.swing li.show {
+    opacity: 1;
+    transform: none;
+    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+}
+
+.highlight li.show {
+    animation: fadeout 4s normal;
+    -webkit-animation: fadeout 4s normal;
+    background-color: white;
+}
+@keyframes fadeout {
+    20% {
+        background-color: antiquewhite;
+    }
+}
+
 .list-item-container {
-    padding: 1em 1em 1em 4em;
+    padding: 0.75em 0.5em 0.75em 4em;
     position: relative;
 }
 .list-item-magnitude {
@@ -90,6 +108,11 @@ body, html {
     border: 1px solid #888;
     background-color: white;
 }
+
+/********************/
+/*      Map CSS     */
+/********************/
+
 .map-container {
     display: block;
     position: absolute;
@@ -106,7 +129,19 @@ body, html {
     width: 100%;
     margin: 0 0 15px;
 }
-.fade-in {
+
+.quakes-marker-icon {
+    background-image: url('quake.png');
+    text-align: center;
+    background-size: 100%;
+    margin-top: 0;
+}
+
+.quakes-marker-icon b {
+    color: whitesmoke;
+}
+
+.marker-fade-in {
     animation: fadein 1s ease-in-out;
     -webkit-animation: fadein 1s ease-in-out;
     opacity: 1.0
@@ -115,13 +150,6 @@ body, html {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-.list-item-new {
-    animation: fadeout 4s normal;
-    -webkit-animation: fadeout 4s normal;
-    background-color: white;
-}
-@keyframes fadeout {
-    20% {
-        background-color: antiquewhite;
-    }
-}
+
+
+

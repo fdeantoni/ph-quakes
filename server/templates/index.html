@@ -23,11 +23,12 @@
 <body>
     <div class="list-container">
         <h2>Earthquakes PH 24h</h2>
-        <ul class="list-view" id="displayed-list"></ul>
+        <ul class="list-view fade highlight" id="displayed-list"></ul>
     </div>
     <div class="map-container" id="mapid"></div>
 
-    <script type='text/javascript' src='/static/quakes/quakes.js'></script>
+    <script type='text/javascript' src='/static/quakes/common.js'></script>
+    <script type='text/javascript' src='/static/quakes/current.js'></script>
     <script>
 
         function connect() {
@@ -45,7 +46,7 @@
                     loadData(json);
                     loaded = true;
                 } else {
-                    updateData(json);
+                    appendData(json);
                 }
             };
 
