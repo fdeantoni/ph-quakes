@@ -7,29 +7,35 @@ function updateList(layer, bounded = true) {
         const second = moment(b.feature.properties.datetime);
         return second - first;
     });
-    document.getElementById('displayed-list').innerHTML = "";
+    const list = document.getElementById('displayed-list');
+    list.innerHTML = "";
+
     displayed.forEach(function(quake){
         const layerId = layer.getLayerId(quake);
         const props = quake.feature.properties;
         const inBounds = mymap.getBounds().contains({lat: props.latitude, lng: props.longitude});
         if( !bounded || (bounded && inBounds) ) {
-            const html = '<li data-layer-id="'+ layerId + '" class="quake-show">' +
-                '<div class="quake-container">' +
+            const newItem = document.createElement('li');
+            newItem.className = "quake-show";
+            newItem.setAttribute("data-layer-id", layerId);
+            newItem.innerHTML = '<div class="quake-container">' +
                 '<span class="quake-magnitude">' + props.magnitude + '</span>' +
                 '<h1 class="quake-location">' + props.province + '</h1>' +
                 '<h2 class="quake-utc">' + props.start + '</h2>' +
                 '<aside class="quake-aside">' + props.depth + ' km</aside>' +
-                '</div></li>';
-            $('#displayed-list').append(html);
-        }
-    });
+                '</div>';
 
-    $('.list-view > li').click(function(e) {
-        $('.list-view > li').removeClass('quake-selected');
-        $(this).addClass('quake-selected');
-        const marker = layer.getLayer($(this).attr('data-layer-id'));
-        mymap.flyTo(marker.getLatLng(), 14);
-        marker.openPopup();
+            newItem.onclick = function(e) {
+                $('.list-view > li').removeClass('quake-selected');
+                $(this).addClass('quake-selected');
+                mymap.flyTo(quake.getLatLng(), 14);
+                mymap.once('moveend', function() {
+                    quake.openPopup();
+                });
+            };
+
+            list.prepend(newItem);
+        }
     });
 }
 
