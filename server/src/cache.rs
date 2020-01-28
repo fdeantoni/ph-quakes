@@ -1,4 +1,5 @@
 use actix::prelude::*;
+use actix::dev::{MessageResponse, ResponseChannel};
 use log::*;
 
 use quakes_api::*;
@@ -49,6 +50,36 @@ impl Handler<UpdateCache> for CacheActor {
         }
     }
 }
+
+
+pub struct GetQuakes;
+pub struct GetQuakesResponse(pub QuakeList);
+
+impl<A, M> MessageResponse<A, M> for GetQuakesResponse
+    where
+        A: Actor,
+        M: Message<Result = GetQuakesResponse>,
+{
+    fn handle<R: ResponseChannel<M>>(self, _: &mut <A as Actor>::Context, tx: Option<R>) {
+        if let Some(tx) = tx {
+            tx.send(self);
+        }
+    }
+}
+
+impl Message for GetQuakes {
+    type Result = GetQuakesResponse;
+}
+
+impl Handler<GetQuakes> for CacheActor {
+    type Result = GetQuakesResponse;
+
+    fn handle(&mut self, _: GetQuakes, _: &mut Self::Context) -> Self::Result {
+        let quakes = QuakeList::new(self.quakes.clone());
+        GetQuakesResponse(quakes)
+    }
+}
+
 
 #[derive(Message)]
 #[rtype(result = "()")]

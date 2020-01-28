@@ -37,10 +37,15 @@ async fn history() -> impl Responder {
     HttpResponse::Ok().content_type("text/html").body(body)
 }
 
-async fn quakes_json() -> impl Responder {
-    let quakes = get_quakes().await;
-    let geojson = QuakeList::new(quakes);
-    web::Json(geojson.to_geojson())
+async fn quakes_json(cache: web::Data<Addr<cache::CacheActor>>) -> impl Responder {
+    match cache.send(cache::GetQuakes).await {
+        Ok(response) => web::Json(response.0.to_geojson()),
+        Err(error) => {
+            error!("Failed to retrieve latest quakes: {:?}", error);
+            let quakes = QuakeList::new(Vec::new());
+            web::Json(quakes.to_geojson())
+        }
+    }
 }
 
 async fn get_quakes() -> Vec<Quake> {
