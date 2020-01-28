@@ -29,8 +29,18 @@ function markerPopup(feature, layer) {
             '<li><b>Magnitude: </b>' + props.magnitude + '</li>' +
             '<li><b>Depth:     </b>' + props.depth + '</li>' +
             '<li><b>Location:  </b>' + props.location + '</li>' +
+            '<li><b>Timestamp:  </b>' + props.datetime + '</li>' +
             '<li><b>Source:    </b><a href="'+ props.url +'" target="_blank">phivolcs</li>' +
             '</ul>';
         layer.bindPopup(header + details);
     }
+}
+
+function quakeListItemHtml(props) {
+    return '<div class="quake-container">' +
+        '<span class="quake-magnitude">' + props.magnitude + '</span>' +
+        '<h1 class="quake-location">' + props.province + '</h1>' +
+        '<h2 class="quake-timestamp">' + moment(props.start).tz('Asia/Manila').format() + '</h2>' +
+        '<aside class="quake-aside">' + props.depth + ' km</aside>' +
+        '</div>';
 }

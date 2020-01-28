@@ -65,7 +65,7 @@ html, body, #map {
     font-weight: 700;
     margin: 0 0 0.1em;
 }
-.quake-utc {
+.quake-timestamp {
     font-size: 0.9em;
     font-weight: 400;
     margin: 0;
@@ -118,8 +118,3 @@ html, body, #map {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-
-
-
-
-

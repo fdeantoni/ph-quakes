@@ -13,12 +13,7 @@ function updateList(layer) {
         const props = quake.feature.properties;
         const newItem = document.createElement('li');
         newItem.setAttribute("data-layer-id", layerId);
-        newItem.innerHTML = '<div class="quake-container">' +
-            '<span class="quake-magnitude">' + props.magnitude + '</span>' +
-            '<h1 class="quake-location">' + props.province + '</h1>' +
-            '<h2 class="quake-utc">' + props.start + '</h2>' +
-            '<aside class="quake-aside">' + props.depth + ' km</aside>' +
-            '</div>';
+        newItem.innerHTML = quakeListItemHtml(props);
 
         newItem.onclick = function(e) {
             $('.list-view > li').removeClass('quake-selected');
