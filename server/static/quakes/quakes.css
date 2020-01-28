@@ -8,7 +8,7 @@ body, html {
 }
 
 .quake-sidebar {
-    width: 335px;
+    width: 360px;
     position: fixed;
     top: 0;
     left: 0;
@@ -20,24 +20,17 @@ body, html {
 }
 
 .quake-sidebar > div.quake-sidebar-tab  {
-    width: 15px;
     transform: rotate(90deg);
-    padding: 0;
-    font-size: .88em;
-    margin-left: 320px;
+    width: 355px;
+    height: 15px;
+    padding-left: 310px;
+    text-align: right;
+    line-height: 1em;
 }
 
 .quake-sidebar > div.info-container  {
-    /*position: fixed;*/
-    /*top: 0;*/
-    /*left: 0;*/
-    /*right: auto;*/
-    /*bottom: 0;*/
-    /*padding: 0;*/
     font-size: .88em;
-    /*overflow-y: auto;*/
     width: 320px;
-    float: left;
 }
 
 .info-header {
@@ -140,7 +133,7 @@ body, html {
     display: block;
     position: absolute;
     top: 0;
-    left: 335px;
+    left: 360px;
     bottom: 0;
     right: 0;
 }
@@ -173,6 +166,8 @@ body, html {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+
 
 
 
