@@ -3,5 +3,6 @@
 
 /server/quakes.json
 /server/index.html
+/server/history.html
 
 .env

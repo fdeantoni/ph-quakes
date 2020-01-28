@@ -63,7 +63,8 @@ function loadHistory(map, json) {
             return moment(date).format("YYYY-MM-DD HH:MM:SS");
         },
         steps: 4000,
-        duration: 80000
+        duration: 80000,
+        position: "bottomright"
     });
 
     let timeline = historyMarkers(json);

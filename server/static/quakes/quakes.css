@@ -1,56 +1,15 @@
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons|Merriweather:400,400italic,700|Source+Sans+Pro:400,300,700);
-
-body, html {
+body {
+    padding: 0;
     margin: 0;
-    padding: 0;
-    font-family: "Open Sans", sans-serif;
-    line-height: 1.5;
 }
 
-.quake-sidebar {
-    width: 360px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: auto;
-    bottom: 0;
-    padding: 0;
-    overflow-y: auto;
-    display: block;
+html, body, #map {
+    height: 100%;
+    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.quake-sidebar > div.quake-sidebar-tab  {
-    transform: rotate(90deg);
-    width: 355px;
-    height: 15px;
-    padding-left: 310px;
-    text-align: right;
-    line-height: 1em;
-}
-
-.quake-sidebar > div.info-container  {
-    font-size: .88em;
-    width: 320px;
-}
-
-.info-header {
-    padding: 1em 0 0 1em;
-    margin-bottom: 0;
-    text-align: center;
-    display: block;
-}
-
-.info-header > h1 {
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 1.5em;
-}
-
-.info-header > a {
-    padding: 0 0 0 0.5em;
-    display: table-cell;
-    vertical-align:middle;
-    font-weight: bold;
+.sidebar {
+    width: 390px;
 }
 
 /*********************/
@@ -60,6 +19,7 @@ body, html {
 .quake-list {
     list-style: none;
     padding: 0;
+    max-width: 320px;
 }
 
 .quake-fade li {
@@ -116,7 +76,7 @@ body, html {
     padding-left: 1.5em;
     position: absolute;
     right: 1em;
-    text-align: right;
+    text-align: left;
     white-space: nowrap;
     font-size: .9em;
 }
@@ -129,16 +89,8 @@ body, html {
 /*      Map CSS     */
 /********************/
 
-.map-container {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 360px;
-    bottom: 0;
-    right: 0;
-}
-.leaflet-bottom.leaflet-left{
-    width: 100%;
+.leaflet-bottom.leaflet-right {
+    width: 66%;
 }
 .leaflet-control-container .leaflet-timeline-controls{
     box-sizing: border-box;

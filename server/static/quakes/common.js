@@ -1,6 +1,6 @@
 function createMap() {
 
-    let map = L.map('mapid', {
+    let map = L.map('map', {
         center: [12.5, 120.91],
         zoom: 5,
         maxZoom: 18
@@ -15,6 +15,8 @@ function createMap() {
     };
 
     L.tileLayer(mapboxUrl, mapboxConfig).addTo(map);
+
+    L.control.sidebar('sidebar').addTo(map);
 
     return map;
 }
