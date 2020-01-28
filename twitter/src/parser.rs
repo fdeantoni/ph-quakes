@@ -164,7 +164,7 @@ impl TweetParser {
 
         for tweet in self.0.clone() {
 
-            if tweet.get_text().starts_with("#EarthquakePH") {
+            if tweet.get_text().contains("Earthquake Information") {
                 let row = Self::parse_text(tweet.get_text());
 
                 let datetime = Self::get_datetime(&row)?;
