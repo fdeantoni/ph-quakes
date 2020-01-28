@@ -20,6 +20,14 @@ the following:
     $ cd ph-quakes/server
     $ cargo run 
 
+## Leaflet Plugins ##
+
+Besides Leaflet, this project also makes use of the following Leaflet plugins:
+ * [Leaflet.Spin](https://github.com/makinacorpus/Leaflet.Spin)
+ * [sidebar-v2](https://github.com/Turbo87/sidebar-v2)
+ * [Leaflet.timeline](https://github.com/skeate/Leaflet.timeline)
+ * [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster)
+
 ## License ##
 
 `ph-quakes` is distributed under the terms of the Apache License (Version 2.0).
