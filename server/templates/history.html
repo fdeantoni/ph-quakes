@@ -62,16 +62,18 @@
     <script type='text/javascript' src="/static/spin/leaflet.spin.min.js"></script>
     <script type='text/javascript' src="/static/spin/spin.min.js"></script>
 
-    <script type='text/javascript' src='/static/quakes/common.js'></script>
-    <script type='text/javascript' src='/static/quakes/history.js'></script>
-    <script>
+    <script type='module' src='/static/quakes/common.js'></script>
+    <script type='module' src='/static/quakes/history.js'></script>
+    <script type="module">
 
-        mymap.spin(true);
+        import HistoryMap from "/static/quakes/history.js";
+
+        const map = new HistoryMap();
+
         fetch("/quakes.json")
             .then(response => response.json())
             .then(json => {
-                loadData(json);
-                mymap.spin(false);
+                map.load(json);
             });
 
     </script>

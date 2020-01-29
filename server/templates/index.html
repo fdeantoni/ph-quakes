@@ -65,15 +65,18 @@
     <script type='text/javascript' src="/static/spin/leaflet.spin.min.js"></script>
     <script type='text/javascript' src="/static/spin/spin.min.js"></script>
 
-    <script type='text/javascript' src='/static/quakes/common.js'></script>
-    <script type='text/javascript' src='/static/quakes/current.js'></script>
-    <script>
+    <script type='module' src='/static/quakes/common.js'></script>
+    <script type='module' src='/static/quakes/current.js'></script>
+    <script type="module">
 
-        mymap.spin(true);
+        import CurrentMap from "/static/quakes/current.js";
+
+        const map = new CurrentMap();
+
         function connect() {
             const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
             let ws = new WebSocket(wsUri);
-            let loaded = false;
+
             ws.onopen = function() {
                 // TODO: set config here.
             };
@@ -81,13 +84,7 @@
             ws.onmessage = function(e) {
                 const json = JSON.parse(event.data);
                 console.log('New quakes ', json);
-                if(!loaded) {
-                    loadData(json);
-                    loaded = true;
-                    mymap.spin(false);
-                } else {
-                    appendData(json);
-                }
+                map.add(json);
             };
 
             ws.onclose = function(e) {
