@@ -4,9 +4,12 @@ class HistoryMap extends QuakeMap {
 
     #layer;
     #control;
+    #list;
 
-    constructor() {
-        super();
+    constructor(mapId, sidebarId, listId) {
+        super(mapId, sidebarId);
+
+        this.#list = document.getElementById(listId);
 
         this.map.spin(true);
     }
@@ -35,7 +38,7 @@ class HistoryMap extends QuakeMap {
         });
     };
 
-    static updateList(layer, map) {
+    static updateList(layer, map, list) {
 
         console.log("Map ", map);
 
@@ -44,7 +47,6 @@ class HistoryMap extends QuakeMap {
             const second = moment(b.feature.properties.datetime);
             return second - first;
         });
-        const list = document.getElementById('displayed-list');
         list.innerHTML = "";
 
         displayed.forEach(function(quake){
@@ -85,9 +87,10 @@ class HistoryMap extends QuakeMap {
         let timeline = HistoryMap.historyMarkers(json);
 
         const map = this.map;
+        const list = this.#list;
 
         timeline.on('change', function(e){
-            HistoryMap.updateList(e.target, map);
+            HistoryMap.updateList(e.target, map, list);
         });
 
         timelineControl.addTo(map);
@@ -95,8 +98,8 @@ class HistoryMap extends QuakeMap {
 
         timeline.addTo(map);
 
-        this.layer = timeline;
-        this.control = timelineControl;
+        this.#layer = timeline;
+        this.#control = timelineControl;
 
         map.spin(false);
     }

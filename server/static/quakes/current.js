@@ -3,10 +3,13 @@ import QuakeMap from "./common.js";
 class CurrentMap extends QuakeMap {
 
     #initialized = false;
+    #list;
     #layer;
 
-    constructor() {
-        super();
+    constructor(mapId, sidebarId, listId) {
+        super(mapId, sidebarId);
+
+        this.#list = document.getElementById(listId);
 
         this.map.spin(true);
     }
@@ -42,14 +45,13 @@ class CurrentMap extends QuakeMap {
         };
     }
 
-    static updateList(layer, map) {
+    static updateList(layer, map, list) {
 
         const displayed = layer.getLayers().sort(function(a,b) {
             const first = moment(a.feature.properties.datetime);
             const second = moment(b.feature.properties.datetime);
             return second - first;
         });
-        const list = document.getElementById('displayed-list');
         displayed.forEach(function(quake){
             const layerId = layer.getLayerId(quake);
             const props = quake.feature.properties;
@@ -66,7 +68,6 @@ class CurrentMap extends QuakeMap {
                     if(parent) {
                         let group = parent._group;
                         if(group && typeof group.zoomToShowLayer == 'function') {
-                            console.log("Got group!");
                             group.zoomToShowLayer(quake, function() {
                                 quake.openPopup();
                             });
@@ -101,16 +102,22 @@ class CurrentMap extends QuakeMap {
             cluster.addLayer(markers);
             this.map.addLayer(cluster);
 
-            CurrentMap.updateList(cluster, this.map);
+            CurrentMap.updateList(cluster, this.map, this.#list);
 
-            this.layer = cluster;
+            this.#layer = cluster;
             this.map.spin(false);
             this.#initialized = true;
         } else {
-            this.layer.addLayers(markers);
-            this.layer.refreshClusters(markers);
-            CurrentMap.updateList(markers, this.map);
+            this.#layer.addLayers(markers);
+            this.#layer.refreshClusters(markers);
+
+            CurrentMap.updateList(markers, this.map, this.#list);
         }
+    }
+
+    clear() {
+        this.#layer.clearLayers();
+        this.#list.innerHTML = "";
     }
 }
 

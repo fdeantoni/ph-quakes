@@ -44,7 +44,7 @@
                     Quakes 24h
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-                <ul class="quake-list quake-fade quake-highlight" id="displayed-list"></ul>
+                <ul id="list" class="quake-list quake-fade quake-highlight"></ul>
             </div>
 
         </div>
@@ -71,7 +71,9 @@
 
         import CurrentMap from "/static/quakes/current.js";
 
-        const map = new CurrentMap();
+        const map = new CurrentMap("map", "sidebar", "list");
+
+        let reconnected = false;
 
         function connect() {
             const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
@@ -84,12 +86,15 @@
             ws.onmessage = function(e) {
                 const json = JSON.parse(event.data);
                 console.log('New quakes ', json);
+                if(reconnected) map.clear();
                 map.add(json);
+                reconnected = false;
             };
 
             ws.onclose = function(e) {
                 console.log('Socket is closed. Reconnect will be attempted in 10 seconds.', e.reason);
                 setTimeout(function() {
+                    reconnected = true;
                     connect();
                 }, 10000);
             };

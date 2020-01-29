@@ -42,7 +42,7 @@
                     Quakes History
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-                <ul class="quake-list quake-fade quake-highlight" id="displayed-list"></ul>
+                <ul id="list" class="quake-list quake-fade quake-highlight"></ul>
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@
 
         import HistoryMap from "/static/quakes/history.js";
 
-        const map = new HistoryMap();
+        const map = new HistoryMap("map", "sidebar", "list");
 
         fetch("/quakes.json")
             .then(response => response.json())

@@ -1,7 +1,9 @@
 class QuakeMap {
 
-    constructor() {
-        this.map = L.map('map', {
+    map;
+
+    constructor(mapId, sidebarId) {
+        this.map = L.map(mapId, {
             center: [12.5, 120.91],
             zoom: 5,
             maxZoom: 18
@@ -19,7 +21,7 @@ class QuakeMap {
 
         L.tileLayer(mapboxUrl, mapboxConfig).addTo(this.map);
 
-        L.control.sidebar('sidebar').addTo(this.map);
+        L.control.sidebar(sidebarId).addTo(this.map);
     }
 
     static markerPopup(feature, layer) {
