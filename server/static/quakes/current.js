@@ -12,8 +12,6 @@ class CurrentMap extends QuakeMap {
         super(mapId, sidebarId);
 
         this.#list = document.getElementById(listId);
-
-        this.map.spin(true);
     }
 
     static currentMarkers(json) {
@@ -94,7 +92,6 @@ class CurrentMap extends QuakeMap {
             CurrentMap.updateList(cluster, this.map, this.#list);
 
             this.#layer = cluster;
-            this.map.spin(false);
             this.#initialized = true;
         } else {
             this.#layer.addLayers(markers);
