@@ -45,7 +45,7 @@ class HistoryMap extends QuakeMap {
         const displayed = layer.getLayers().sort(function(a,b) {
             const first = moment(a.feature.properties.datetime);
             const second = moment(b.feature.properties.datetime);
-            return second - first;
+            return first - second;
         });
         list.innerHTML = "";
 

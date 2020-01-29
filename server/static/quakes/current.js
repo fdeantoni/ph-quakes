@@ -52,7 +52,7 @@ class CurrentMap extends QuakeMap {
         const displayed = layer.getLayers().sort(function(a,b) {
             const first = moment(a.feature.properties.datetime);
             const second = moment(b.feature.properties.datetime);
-            return second - first;
+            return first - second;
         });
         displayed.forEach(function(quake){
             const layerId = layer.getLayerId(quake);
@@ -92,7 +92,8 @@ class CurrentMap extends QuakeMap {
     }
 
     add(json) {
-        let markers = CurrentMap.currentMarkers(json);
+        let latest = CurrentMap.filterOld(json);
+        let markers = CurrentMap.currentMarkers(latest);
 
         if(!this.#initialized) {
             let cluster = L.markerClusterGroup({
