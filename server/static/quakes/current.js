@@ -16,20 +16,11 @@ class CurrentMap extends QuakeMap {
         this.map.spin(true);
     }
 
-    static markerIcon(size, text) {
-        const style = "width: " + size + "px; height: " + size + "px; line-height: " + size + "px;";
-        const html = '<div class="quakes-marker-icon" style="'+ style +'"><b>' + text + '</b></div>';
-        return L.divIcon({ html: html, className: 'quakes-cluster', iconSize: L.point(size, size) });
-    }
-
     static currentMarkers(json) {
         return L.geoJSON(json, {
             pointToLayer: function(feature, latlng) {
                 if (feature.properties) {
-                    return new L.marker(latlng, {
-                        icon: CurrentMap.markerIcon(20,1),
-                        zIndexOffset: 1000
-                    });
+                    return CurrentMap.quakeMarker(latlng, feature.properties.magnitude, feature.properties.depth);
                 }
             },
             onEachFeature: CurrentMap.markerPopup
@@ -62,23 +53,9 @@ class CurrentMap extends QuakeMap {
             newItem.innerHTML = CurrentMap.quakeListItemHtml(props);
 
             newItem.onclick = function(e) {
-                $('.list-view > li').removeClass('quake-selected');
-                $(this).addClass('quake-selected');
-                map.flyTo(quake.getLatLng(), 14);
+                map.flyTo(quake.getLatLng(), 10);
                 map.once('moveend', function() {
-                    let parent = quake.__parent;
-                    if(parent) {
-                        let group = parent._group;
-                        if(group && typeof group.zoomToShowLayer == 'function') {
-                            group.zoomToShowLayer(quake, function() {
-                                quake.openPopup();
-                            });
-                        } else {
-                            quake.openPopup();
-                        }
-                    } else {
-                        quake.openPopup();
-                    }
+                    quake.openPopup();
                 });
             };
 
@@ -91,15 +68,24 @@ class CurrentMap extends QuakeMap {
         });
     }
 
+    static clusterIcon(size, text) {
+        const style = "width: " + size + "px; height: " + size + "px; line-height: " + size + "px;";
+        const html = '<div class="quakes-marker-icon" style="'+ style +'"><b>' + text + '</b></div>';
+        return L.divIcon({ html: html, className: 'quakes-cluster', iconSize: L.point(size, size) });
+    }
+
     add(json) {
         let latest = CurrentMap.filterOld(json);
         let markers = CurrentMap.currentMarkers(latest);
 
         if(!this.#initialized) {
             let cluster = L.markerClusterGroup({
+                maxClusterRadius: function (zoom) {
+                    return (zoom <= 6) ? 80 : 1; // radius in pixels
+                },
                 iconCreateFunction: function(cluster) {
                     const size = Math.log(cluster.getChildCount())*40;
-                    return CurrentMap.markerIcon(size, cluster.getChildCount());
+                    return CurrentMap.clusterIcon(size, cluster.getChildCount());
                 }
             });
             cluster.addLayer(markers);

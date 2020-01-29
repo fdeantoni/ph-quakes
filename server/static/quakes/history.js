@@ -24,14 +24,7 @@ class HistoryMap extends QuakeMap {
         return L.timeline(json, {
             pointToLayer: function(feature, latlng) {
                 if (feature.properties && feature.properties.magnitude && feature.properties.depth) {
-                    return new L.circleMarker(latlng, {
-                        className: "fade-in",
-                        radius: HistoryMap.radius(feature.properties.magnitude, feature.properties.depth),
-                        fillColor: "#ff3b33",
-                        color: "#ff3b33",
-                        weight: 1,
-                        fillOpacity: 0.6
-                    });
+                    return HistoryMap.quakeMarker(latlng, feature.properties.magnitude, feature.properties.depth);
                 }
             },
             onEachFeature: HistoryMap.markerPopup
@@ -60,8 +53,6 @@ class HistoryMap extends QuakeMap {
                 newItem.innerHTML = HistoryMap.quakeListItemHtml(props);
 
                 newItem.onclick = function(e) {
-                    $('.list-view > li').removeClass('quake-selected');
-                    $(this).addClass('quake-selected');
                     map.flyTo(quake.getLatLng(), 14);
                     map.once('moveend', function() {
                         quake.openPopup();

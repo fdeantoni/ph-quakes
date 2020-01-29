@@ -6,8 +6,8 @@ class QuakeMap {
 
     constructor(mapId, sidebarId) {
         this.map = L.map(mapId, {
-            center: [12.5, 120.91],
-            zoom: 5,
+            center: [15.5, 120.91],
+            zoom: 7,
             maxZoom: 18
         });
 
@@ -24,6 +24,23 @@ class QuakeMap {
         L.tileLayer(mapboxUrl, mapboxConfig).addTo(this.map);
 
         L.control.sidebar(sidebarId).addTo(this.map);
+    }
+
+    static radius(magnitude, depth) {
+        let size = Math.ceil(Math.exp(magnitude) / depth);
+        if(size < 5) size = 5;
+        return size
+    }
+
+    static quakeMarker(latlng, magnitude, depth) {
+        return new L.circleMarker(latlng, {
+            className: "fade-in",
+            radius: QuakeMap.radius(magnitude, depth),
+            fillColor: "#ff3b33",
+            color: "#ff3b33",
+            weight: 1,
+            fillOpacity: 0.6
+        });
     }
 
     static markerPopup(feature, layer) {

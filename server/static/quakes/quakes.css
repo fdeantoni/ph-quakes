@@ -3,13 +3,17 @@ body {
     margin: 0;
 }
 
-html, body, #map {
+html, body  {
     height: 100%;
     font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .sidebar {
     width: 390px;
+}
+
+.map-container {
+    height: 100%;
 }
 
 /*********************/
@@ -25,6 +29,11 @@ html, body, #map {
 .quake-fade li {
     transition: all 0.4s ease-out;
     opacity: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.quake-list li:hover {
+    border: 1px solid #989898;
 }
 .quake-fade li.quake-show {
     opacity: 1;
@@ -79,10 +88,6 @@ html, body, #map {
     text-align: left;
     white-space: nowrap;
     font-size: .9em;
-}
-.quake-selected {
-    border: 1px solid #888;
-    background-color: white;
 }
 
 /********************/
