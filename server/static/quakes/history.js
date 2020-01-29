@@ -10,6 +10,8 @@ class HistoryMap extends QuakeMap {
         super(mapId, sidebarId);
 
         this.#list = document.getElementById(listId);
+
+        this.map.spin(true);
     }
 
     static radius(magnitude, depth) {
@@ -89,6 +91,8 @@ class HistoryMap extends QuakeMap {
 
         this.#layer = timeline;
         this.#control = timelineControl;
+
+        map.spin(false);
     }
 }
 
