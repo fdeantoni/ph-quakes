@@ -1,3 +1,5 @@
+"use strict";
+
 import QuakeMap from "./common.js";
 
 class CurrentMap extends QuakeMap {
