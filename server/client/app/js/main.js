@@ -15,27 +15,32 @@ function add(json) {
     current.add(json);
 }
 
-const historyToggle = document.getElementById('history-toggle');
-historyToggle.onclick = function() {
-    const listHeader = document.getElementById("list-header");
-    const currentContainer = document.getElementById("current-map");
-    const currentList = document.getElementById("current-list");
-    const historyContainer = document.getElementById("history-map");
-    const historyList = document.getElementById("history-list");
-    currentContainer.classList.toggle("hide");
-    currentList.classList.toggle("hide");
-    historyContainer.classList.toggle("hide");
-    historyList.classList.toggle("hide");
-    if (!historyContainer.classList.contains("hide")) {
-        listHeader.innerHTML = listHeader.innerHTML.replace("24h", "History");
+function display(show, hide) {
+    document.getElementById(show + "-map").classList.remove("hide");
+    document.getElementById(show + "-list").classList.remove("hide");
+    document.getElementById(hide + "-map").classList.add("hide");
+    document.getElementById(hide + "-list").classList.add("hide");
+    const header = document.getElementById("list-header");
+    if(show === "history") {
+        header.innerHTML = header.innerHTML.replace("24h", "History");
         history.clear();
         history.leafletMap._onResize();
         history.load(geojson);
-        historyToggle.classList.replace("fa-history", "fa-flash");
     } else {
-        listHeader.innerHTML = listHeader.innerHTML.replace("History", "24h");
-        historyToggle.classList.replace("fa-flash", "fa-history");
+        header.innerHTML = header.innerHTML.replace("History", "24h");
     }
+}
+
+document.getElementById("history-toggle").onclick = function() {
+    this.classList.add("hide");
+    display("history", "current");
+    document.getElementById("current-toggle").classList.remove("hide");
+};
+
+document.getElementById("current-toggle").onclick = function() {
+    this.classList.add("hide");
+    display("current", "history");
+    document.getElementById("history-toggle").classList.remove("hide");
 };
 
 function connect() {
