@@ -1,0 +1,43 @@
+{
+  "name": "ph-quakes-client",
+  "version": "1.0.0",
+  "description": "Earthquakes in the Philippines",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdeantoni/ph-quakes.git"
+  },
+  "author": "fdeantoni@gmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/fdeantoni/ph-quakes/issues"
+  },
+  "homepage": "https://github.com/fdeantoni/ph-quakes#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babelify": "^10.0.0",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-plumber": "^1.2.1",
+    "gulplog": "^1.0.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.1"
+  },
+  "dependencies": {
+    "leaflet": "^1.6.0",
+    "leaflet-sidebar-v2": "^1.1.1",
+    "leaflet-spin": "^1.1.0",
+    "leaflet.markercluster": "^1.4.1",
+    "leaflet.timeline": "^1.2.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}

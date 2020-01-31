@@ -12,8 +12,16 @@ html, body  {
     width: 390px;
 }
 
+.sidebar-close > i {
+    color: white;
+}
+
 .map-container {
     height: 100%;
+}
+
+.hide {
+    display: none;
 }
 
 /*********************/

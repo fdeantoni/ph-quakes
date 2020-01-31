@@ -5,4 +5,7 @@
 /server/index.html
 /server/history.html
 
+/server/client/node_modules
+/server/client/dist
+
 .env

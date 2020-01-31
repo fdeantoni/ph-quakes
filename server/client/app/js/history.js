@@ -2,16 +2,14 @@ import QuakeMap from "./common.js";
 
 class HistoryMap extends QuakeMap {
 
-    #layer;
-    #control;
-    #list;
-
     constructor(mapId, sidebarId, listId) {
         super(mapId, sidebarId);
 
-        this.#list = document.getElementById(listId);
+        this.list = document.getElementById(listId);
 
         this.map.spin(true);
+
+        this.initialized = false;
     }
 
     static radius(magnitude, depth) {
@@ -32,8 +30,6 @@ class HistoryMap extends QuakeMap {
     };
 
     static updateList(layer, map, list) {
-
-        console.log("Map ", map);
 
         const displayed = layer.getLayers().sort(function(a,b) {
             const first = moment(a.feature.properties.datetime);
@@ -78,7 +74,7 @@ class HistoryMap extends QuakeMap {
         let timeline = HistoryMap.historyMarkers(json);
 
         const map = this.map;
-        const list = this.#list;
+        const list = this.list;
 
         timeline.on('change', function(e){
             HistoryMap.updateList(e.target, map, list);
@@ -89,10 +85,21 @@ class HistoryMap extends QuakeMap {
 
         timeline.addTo(map);
 
-        this.#layer = timeline;
-        this.#control = timelineControl;
+        this.layer = timeline;
+        this.control = timelineControl;
 
         map.spin(false);
+        this.initialized = true;
+    }
+
+    clear() {
+        if(this.initialized) {
+            this.control.removeTimelines();
+            this.map.removeControl(this.control);
+            this.control = {};
+            this.layer.clearLayers();
+            this.list.innerHTML = "";
+        }
     }
 }
 

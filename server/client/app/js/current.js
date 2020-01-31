@@ -4,14 +4,12 @@ import QuakeMap from "./common.js";
 
 class CurrentMap extends QuakeMap {
 
-    #initialized = false;
-    #list;
-    #layer;
-
     constructor(mapId, sidebarId, listId) {
         super(mapId, sidebarId);
 
-        this.#list = document.getElementById(listId);
+        this.list = document.getElementById(listId);
+
+        this.initialized = false;
     }
 
     static currentMarkers(json) {
@@ -76,7 +74,7 @@ class CurrentMap extends QuakeMap {
         let latest = CurrentMap.filterOld(json);
         let markers = CurrentMap.currentMarkers(latest);
 
-        if(!this.#initialized) {
+        if(!this.initialized) {
             let cluster = L.markerClusterGroup({
                 maxClusterRadius: function (zoom) {
                     return (zoom <= 6) ? 80 : 1; // radius in pixels
@@ -89,21 +87,21 @@ class CurrentMap extends QuakeMap {
             cluster.addLayer(markers);
             this.map.addLayer(cluster);
 
-            CurrentMap.updateList(cluster, this.map, this.#list);
+            CurrentMap.updateList(cluster, this.map, this.list);
 
-            this.#layer = cluster;
-            this.#initialized = true;
+            this.layer = cluster;
+            this.initialized = true;
         } else {
-            this.#layer.addLayers(markers);
-            this.#layer.refreshClusters(markers);
+            this.layer.addLayers(markers);
+            this.layer.refreshClusters(markers);
 
-            CurrentMap.updateList(markers, this.map, this.#list);
+            CurrentMap.updateList(markers, this.map, this.list);
         }
     }
 
     clear() {
-        this.#layer.clearLayers();
-        this.#list.innerHTML = "";
+        this.layer.clearLayers();
+        this.list.innerHTML = "";
     }
 }
 

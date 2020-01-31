@@ -1,8 +1,4 @@
-"use strict";
-
 class QuakeMap {
-
-    map;
 
     constructor(mapId, sidebarId) {
         this.map = L.map(mapId, {

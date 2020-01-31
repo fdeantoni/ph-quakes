@@ -24,35 +24,43 @@
 
     <link rel="stylesheet" href="/static/sidebar/leaflet-sidebar.min.css" />
 
+    <link rel="stylesheet" type="text/css" href="static/timeline/leaflet.timeline.css" />
+
     <link rel="stylesheet" type="text/css" href="/static/quakes/quakes.css" />
 
 </head>
 <body>
-    <div id="sidebar" class="sidebar collapsed">
-        <!-- Nav tabs -->
-        <div class="sidebar-tabs">
-            <ul role="tablist">
-                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-            </ul>
-            <ul role="tablist">
-                <li><a href="/history" role="tab"><i class="fa fa-history"></i></a></li>
-            </ul>
-        </div>
-
-        <!-- Tab panes -->
-        <div class="sidebar-content">
-            <div class="sidebar-pane" id="home">
-                <h1 class="sidebar-header">
-                    Quakes 24h
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h1>
-                <ol reversed id="list" class="quake-list quake-fade quake-highlight"></ol>
-            </div>
-
-        </div>
+<div class="sidebar collapsed" id="sidebar">
+    <!-- Nav tabs -->
+    <div class="sidebar-tabs">
+        <ul role="tablist">
+            <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+        </ul>
+        <ul role="tablist">
+            <li><a role="tab"><i class="fa fa-history" id="history-toggle"></i></a></li>
+        </ul>
     </div>
 
-    <div id="map" class="sidebar-map map-container"></div>
+    <!-- Tab panes -->
+    <div class="sidebar-content">
+        <div class="sidebar-pane" id="home">
+            <div>
+                <h1 class="sidebar-header" id="list-header">
+                    Earthquakes 24h
+                </h1>
+                <h1><span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+            <ol reversed class="quake-list quake-fade quake-highlight" id="current-list"></ol>
+            <ol reversed class="quake-list quake-fade quake-highlight hide" id="history-list"></ol>
+        </div>
+
+    </div>
+</div>
+
+<div class="sidebar-map map-container" id="current-map"></div>
+
+<div class="sidebar-map map-container hide" id="history-map"></div>
 
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
             integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -60,56 +68,16 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js'></script>
     <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.27/moment-timezone-with-data.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type='text/javascript' src='static/timeline/leaflet.timeline.js'></script>
 
     <script type='text/javascript' src="/static/sidebar/leaflet-sidebar.min.js"></script>
 
     <script type='text/javascript' src="/static/spin/leaflet.spin.min.js"></script>
     <script type='text/javascript' src="/static/spin/spin.min.js"></script>
 
-    <script type='module' src='/static/quakes/common.js'></script>
-    <script type='module' src='/static/quakes/current.js'></script>
-    <script type="module">
-        "use strict";
+    <script type='text/javascript' src='static/quakes/quakes.js'></script>
 
-        import CurrentMap from "/static/quakes/current.js";
 
-        const map = new CurrentMap("map", "sidebar", "list");
-
-        let reconnected = false;
-
-        function connect() {
-            const wsUri = (window.location.protocol==='https:'&&'wss://'||'ws://') + window.location.host + '/ws/';
-            let ws = new WebSocket(wsUri);
-
-            ws.onopen = function() {
-                // TODO: set config here.
-            };
-
-            ws.onmessage = function(e) {
-                const json = JSON.parse(event.data);
-                console.log('New quakes ', json);
-                if(reconnected) map.clear();
-                map.add(json);
-                reconnected = false;
-            };
-
-            ws.onclose = function(e) {
-                console.log('Socket is closed. Reconnect will be attempted in 10 seconds.', e.reason);
-                setTimeout(function() {
-                    reconnected = true;
-                    connect();
-                }, 10000);
-            };
-
-            ws.onerror = function(err) {
-                console.error('Socket encountered error: ', err.message, 'Closing socket');
-                ws.close();
-            };
-        }
-
-        connect();
-
-    </script>
 </body>
 </html>
