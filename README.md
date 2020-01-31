@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/fdeantoni/ph-quakes.svg?branch=master)](https://travis-ci.org/fdeantoni/ph-quakes)
+[![Build Status](https://travis-ci.com/fdeantoni/ph-quakes.svg?branch=master)](https://travis-ci.com/fdeantoni/ph-quakes)
 [![Dependency Status](https://deps.rs/repo/github/fdeantoni/ph-quakes/status.svg)](https://deps.rs/repo/github/fdeantoni/ph-quakes)
 
 # *PH Quakes* #
