@@ -5,8 +5,10 @@ const plumber = require('gulp-plumber');
 const source = require('vinyl-source-stream');
 const buffer = require("vinyl-buffer");
 const uglify = require("gulp-uglify");
+const postcss = require("gulp-postcss");
+const cssnano = require("cssnano");
+const imagemin = require('gulp-imagemin');
 const del = require('del');
-const watchify = require('watchify');
 
 const config = {
     entries: [
@@ -14,8 +16,8 @@ const config = {
     ]
 };
 
-function bundle(bundler) {
-    bundler
+function javascript(cb) {
+    browserify(config)
         .transform('babelify', { presets: ["@babel/preset-env"] } )
         .bundle()
         .on('error', log.error)
@@ -24,34 +26,44 @@ function bundle(bundler) {
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest('../static/quakes'));
-}
-
-function build(cb) {
-    const bundler = browserify(config);
-    bundle(bundler);
 
     cb();
 }
 
-exports.build = build;
+exports.javascript = javascript;
 
-function watch(cb) {
-    const watcher = watchify(browserify(config, watchify.args));
-    bundle(watcher);
-
-    watcher.on('update', function() {
-        bundle(watcher);
-    });
-
-    watcher.on('log', log.info);
+function css(cb) {
+    gulp.src("app/css/*")
+        .pipe(plumber())
+        .pipe( postcss([cssnano()] ) )
+        .pipe(gulp.dest("../static/quakes"))
+        .on('error', log.error);
 
     cb();
 }
 
-exports.watch = watch;
+exports.css = css;
+
+function image(cb) {
+    gulp.src('app/images/*')
+        .pipe(plumber())
+        .pipe(imagemin())
+        .pipe(gulp.dest('../static/quakes'))
+        .on('error', log.error);
+
+    cb();
+}
+
+exports.build = gulp.parallel(javascript, css, image);
+
+exports.watch = function() {
+    gulp.watch('app/css/*.css', css);
+    gulp.watch('app/images/*', image);
+    gulp.watch('app/js/*.js', gulp.series(clean, javascript));
+};
 
 function clean(cb) {
-    del.sync('../static/quakes/quakes.js');
+    del.sync('../static/quakes/*');
     cb();
 }
 
