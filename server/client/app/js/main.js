@@ -76,19 +76,4 @@ function connect() {
 
 connect();
 
-// let counter = 0;
-//
-// function createDummy() {
-//     return { "features":[
-//             {
-//                 "geometry":{"coordinates":[120.93-counter,13.77],"type":"Point"},
-//                 "properties":{"datetime":moment().utc().toISOString(),"depth":134,"end":moment().utc().add(8, 'hours').toISOString(),"latitude":13.77,"location":"Some location","longitude":120.93-counter,"magnitude":2.4,"province":"Some province " + counter,"start":moment().utc().toISOString(),"url":"http://example.com"},"type":"Feature"}
-//         ],
-//         "type":"FeatureCollection"
-//     };
-// }
-//
-// document.getElementById('add-to-list').onclick = function() {
-//     add(createDummy());
-//     counter = counter + 1;
-// };
+
