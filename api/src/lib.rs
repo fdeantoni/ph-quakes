@@ -7,7 +7,7 @@ pub mod time {
 pub use geojson::{FeatureCollection, Feature, GeoJson, Geometry, Value};
 use serde_json::{Map, to_value};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Quake {
     datetime: DateTime<Utc>,
     longitude: f64,
@@ -17,6 +17,38 @@ pub struct Quake {
     location: String,
     province: String,
     url: String
+}
+
+fn format_f64(coord: &f64) -> String {
+    format!("{:.6}", coord)
+}
+
+impl PartialEq for Quake {
+    fn eq(&self, other: &Self) -> bool {
+        let lng = format_f64(&self.longitude);
+        let lat = format_f64(&self.latitude);
+        let mag = format_f64(&self.magnitude);
+        self.datetime.eq(&other.datetime) &&
+            lng.eq(&format_f64(&other.longitude)) &&
+            lat.eq(&format_f64(&other.latitude)) &&
+            mag.eq(&format_f64(&other.magnitude)) &&
+            self.depth.eq(&other.depth)
+    }
+}
+
+impl Eq for Quake {}
+
+impl Hash for Quake {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        let lng = format_f64(&self.longitude);
+        let lat = format_f64(&self.latitude);
+        let mag = format_f64(&self.magnitude);
+        self.datetime.hash(state);
+        lng.hash(state);
+        lat.hash(state);
+        mag.hash(state);
+        self.depth.hash(state);
+    }
 }
 
 impl Quake {
@@ -151,6 +183,7 @@ impl QuakeList {
 }
 
 use std::borrow::Cow;
+use std::hash::{Hash, Hasher};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct QuakeError {
@@ -193,6 +226,7 @@ impl From<std::io::Error> for QuakeError {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashSet;
 
     fn test_quake() -> Quake {
         let datetime = Utc::now();
@@ -212,6 +246,25 @@ mod tests {
         let feature = quake.to_geojson_feature();
         let geojson = GeoJson::Feature(feature);
         println!("{}", geojson.to_string());
+    }
+
+    #[test]
+    fn compare_quakes() {
+        let one = test_quake();
+        let mut two = one.clone();
+        two.url = "https://some.other.url".to_string();
+        assert_eq!(one, two);
+    }
+
+    #[test]
+    fn compare_quakes_set() {
+        let one = test_quake();
+        let mut two = one.clone();
+        two.url = "https://some.other.url".to_string();
+        let mut set: HashSet<Quake> = HashSet::new();
+        set.insert(one);
+        set.insert(two);
+        println!("{:?}", set);
     }
 
     #[actix_rt::test]
