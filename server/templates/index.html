@@ -35,15 +35,17 @@
     <div class="sidebar-tabs">
         <ul role="tablist">
             <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-        </ul>
-        <ul role="tablist">
             <li id="history-toggle"><a role="tab"><i class="fa fa-history"></i></a></li>
             <li class="hide" id="current-toggle"><a role="tab"><i class="fa fa-flash"></i></a></li>
+        </ul>
+        <ul role="tablist">
+            <li><a href="#about" role="tab"><i class="fa fa-info"></i></a></li>
         </ul>
     </div>
 
     <!-- Tab panes -->
     <div class="sidebar-content">
+
         <div class="sidebar-pane" id="home">
             <div>
                 <h1 class="sidebar-header" id="list-header">
@@ -54,6 +56,27 @@
 
             <ol reversed class="quake-list quake-fade quake-highlight" id="current-list"></ol>
             <ol reversed class="quake-list quake-fade quake-highlight hide" id="history-list"></ol>
+        </div>
+
+        <div class="sidebar-pane" id="about">
+            <h1 class="sidebar-header">About<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+
+            <p>
+                The Philippines is in the <a href="https://en.wikipedia.org/wiki/Ring_of_Fire" target="_blank">Ring of Fire</a> so earthquakes and
+                volcano eruptions are a frequent occurrence. <a href="https://en.wikipedia.org/wiki/Philippine_Institute_of_Volcanology_and_Seismology" target="_blank">PHIVOLCS</a> keeps
+                track of all these and publishes earthquake data on its <a href="https://www.phivolcs.dost.gov.ph/index.php/earthquake/earthquake-information3" target="_blank">website</a>,
+                and <a href="https://twitter.com/phivolcs_dost" target="_blank">Twitter account</a>.
+
+            </p>
+
+            <p>
+                This application makes use of both sources to gather quake data and display it on a <a href="https://leafletjs.com/" target="_blank">leaflet</a>
+                map. It emulates the functionality the <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank">USGS Earthquake Map</a>.
+            </p>
+
+            <p>
+                Source code for this project is available on <a href="https://github.com/fdeantoni/ph-quakes" target="_blank">github</a>, distributed under the Apache License (Version 2.0).
+            </p>
         </div>
 
     </div>

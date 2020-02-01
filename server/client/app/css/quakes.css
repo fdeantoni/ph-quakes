@@ -5,11 +5,17 @@ body {
 
 html, body  {
     height: 100%;
-    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    font-family: "Roboto","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
 }
 
 .sidebar {
     width: 390px;
+}
+
+.sidebar-pane > p {
+    text-align: justify;
+    max-width: 300px;
 }
 
 .sidebar-close > i {

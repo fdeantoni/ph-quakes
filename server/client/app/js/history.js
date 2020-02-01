@@ -75,7 +75,6 @@ class HistoryMap extends QuakeMap {
 
         const map = this.map;
         const list = this.list;
-
         timeline.on('change', function(e){
             HistoryMap.updateList(e.target, map, list);
         });
@@ -88,7 +87,7 @@ class HistoryMap extends QuakeMap {
         this.layer = timeline;
         this.control = timelineControl;
 
-        map.spin(false);
+        this.map.spin(false);
         this.initialized = true;
     }
 

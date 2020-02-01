@@ -7,8 +7,9 @@ class CurrentMap extends QuakeMap {
     constructor(mapId, sidebarId, listId) {
         super(mapId, sidebarId);
 
-        this.list = document.getElementById(listId);
+        this.list = document.getElementById(listId)
 
+        this.map.spin(true);
         this.initialized = false;
     }
 
@@ -90,6 +91,7 @@ class CurrentMap extends QuakeMap {
             CurrentMap.updateList(cluster, this.map, this.list);
 
             this.layer = cluster;
+            this.map.spin(false);
             this.initialized = true;
         } else {
             this.layer.addLayers(markers);
