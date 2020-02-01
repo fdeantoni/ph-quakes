@@ -70,6 +70,7 @@ async fn main() -> std::io::Result<()> {
     }
 
     let quakes = if !is_test { get_quakes().await } else { dummy_quakes() };
+    info!("Collected {} quakes.", &quakes.len());
     let cache = cache::CacheActor::create(|_| {
         cache::CacheActor::new(quakes)
     });

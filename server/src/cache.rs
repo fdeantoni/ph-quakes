@@ -5,6 +5,8 @@ use log::*;
 use quakes_api::*;
 use crate::websocket;
 
+const CACHE_LIMIT: usize = 20_000;
+
 pub(crate) struct CacheActor {
     quakes: Vec<Quake>,
     sessions: Vec<Recipient<websocket::CacheUpdates>>
@@ -38,10 +40,19 @@ impl Handler<UpdateCache> for CacheActor {
         debug!("Current cache size: {}", &self.quakes.len());
         debug!("Updates:\n{:#?}", &quakes);
         quakes.retain(|quake| !self.quakes.contains(quake) );
-        debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
-        self.quakes.extend(quakes.clone());
-        //let quakes = self.update( msg.0.clone());
         if !quakes.is_empty() {
+
+            debug!("Will add the following quakes to the cache:\n{:#?}", &quakes);
+            self.quakes.extend(quakes.clone());
+
+            // Remove old quakes exceeding cache limit
+            if self.quakes.len() > CACHE_LIMIT {
+                let number_to_remove = self.quakes.len() - CACHE_LIMIT;
+                debug!("Cache limit exceeded, dropping {}.", &number_to_remove);
+                self.quakes.drain(0..number_to_remove);
+            }
+
+            // Send new quakes to subscribers
             let list = QuakeList::new(quakes);
             debug!("Sending to clients:\n{:#?}", &list);
             for session in self.sessions.iter() {

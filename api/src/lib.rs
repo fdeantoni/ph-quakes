@@ -1,5 +1,9 @@
 use serde_derive::*;
 pub use chrono::prelude::*;
+pub mod time {
+    pub use ::chrono::Duration;
+}
+
 pub use geojson::{FeatureCollection, Feature, GeoJson, Geometry, Value};
 use serde_json::{Map, to_value};
 

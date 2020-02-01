@@ -4,17 +4,38 @@ pub mod parser;
 use awc;
 use std::borrow::Cow;
 use std::str::Utf8Error;
-use quakes_api::Quake;
+
+use quakes_api::*;
 use crate::client::WebClient;
 use crate::parser::HtmlParser;
 
 static PHILVOLCS_URL: &str = "https://earthquake.phivolcs.dost.gov.ph/";
 
-pub async fn get_philvolcs_quakes() -> Result<Vec<Quake>, ScraperError> {
-    let client = WebClient::new();
+async fn retrieve_previous_month(client: &WebClient) -> Result<Vec<Quake>, ScraperError> {
+    let current = Utc::today();
+    let horizon = Utc::today() - time::Duration::weeks(4);
+    if horizon.month() < current.month() {
+        let url = format!("{}{}.html", PHILVOLCS_URL, horizon.format("%Y_%B"));
+        let html = client.retrieve(url).await?;
+        let parser = HtmlParser::parse(html, PHILVOLCS_URL.to_string()).await;
+        parser.get_quakes().await
+    } else {
+        Ok(Vec::new())
+    }
+}
+
+async fn retrieve_current_month(client: &WebClient) -> Result<Vec<Quake>, ScraperError> {
     let html = client.retrieve(PHILVOLCS_URL.to_string()).await?;
     let parser = HtmlParser::parse(html, PHILVOLCS_URL.to_string()).await;
     parser.get_quakes().await
+}
+
+pub async fn get_philvolcs_quakes() -> Result<Vec<Quake>, ScraperError> {
+    let client = WebClient::new();
+    let mut quakes = retrieve_previous_month(&client).await?;
+    let mut current = retrieve_current_month(&client).await?;
+    quakes.append(&mut current);
+    Ok(quakes)
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -89,8 +110,8 @@ mod tests {
     #[actix_rt::test] #[ignore]
     async fn retrieve_philvolcs_quakes() {
         let quakes = get_philvolcs_quakes().await.unwrap();
-        println!("{:?}", quakes);
+        println!("{:?}", &quakes);
+        println!("{}", &quakes.len());
         assert!(quakes.len() > 0);
     }
-
 }
