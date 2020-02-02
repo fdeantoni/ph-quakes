@@ -10,15 +10,15 @@ use crate::client::WebClient;
 use crate::parser::HtmlParser;
 use std::collections::HashSet;
 
-static PHILVOLCS_URL: &str = "https://earthquake.phivolcs.dost.gov.ph/";
+static PHIVOLCS_URL: &str = "https://earthquake.phivolcs.dost.gov.ph/";
 
 async fn retrieve_previous_month(client: &WebClient) -> Result<Vec<Quake>, ScraperError> {
     let current = Utc::today();
     let horizon = Utc::today() - time::Duration::weeks(4);
     if horizon.month() < current.month() {
-        let url = format!("{}{}.html", PHILVOLCS_URL, horizon.format("%Y_%B"));
+        let url = format!("{}{}.html", PHIVOLCS_URL, horizon.format("%Y_%B"));
         let html = client.retrieve(url).await?;
-        let parser = HtmlParser::parse(html, PHILVOLCS_URL.to_string()).await;
+        let parser = HtmlParser::parse(html, PHIVOLCS_URL.to_string()).await;
         parser.get_quakes().await
     } else {
         Ok(Vec::new())
@@ -26,12 +26,12 @@ async fn retrieve_previous_month(client: &WebClient) -> Result<Vec<Quake>, Scrap
 }
 
 async fn retrieve_current_month(client: &WebClient) -> Result<Vec<Quake>, ScraperError> {
-    let html = client.retrieve(PHILVOLCS_URL.to_string()).await?;
-    let parser = HtmlParser::parse(html, PHILVOLCS_URL.to_string()).await;
+    let html = client.retrieve(PHIVOLCS_URL.to_string()).await?;
+    let parser = HtmlParser::parse(html, PHIVOLCS_URL.to_string()).await;
     parser.get_quakes().await
 }
 
-pub async fn get_philvolcs_quakes() -> Result<Vec<Quake>, ScraperError> {
+pub async fn get_phivolcs_quakes() -> Result<Vec<Quake>, ScraperError> {
     let client = WebClient::new();
     let mut set: HashSet<Quake> = HashSet::new();
     let current = retrieve_current_month(&client).await?;
@@ -113,8 +113,8 @@ mod tests {
     use super::*;
 
     #[actix_rt::test] #[ignore]
-    async fn retrieve_philvolcs_quakes() {
-        let quakes = get_philvolcs_quakes().await.unwrap();
+    async fn retrieve_phivolcs_quakes() {
+        let quakes = get_phivolcs_quakes().await.unwrap();
         println!("{:?}", &quakes);
         println!("{}", &quakes.len());
         assert!(quakes.len() > 0);

@@ -40,7 +40,7 @@ async fn quakes_json(cache: web::Data<Addr<cache::CacheActor>>) -> impl Responde
 }
 
 async fn get_quakes() -> Vec<Quake> {
-    quakes_scraper::get_philvolcs_quakes().await.unwrap()
+    quakes_scraper::get_phivolcs_quakes().await.unwrap()
 }
 
 fn dummy_quakes() -> Vec<Quake> {
