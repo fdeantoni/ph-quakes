@@ -28,6 +28,7 @@ function display(show, hide) {
         history.load(geojson);
     } else {
         header.innerHTML = header.innerHTML.replace("History", "24h");
+        current.leafletMap._onResize();
     }
 }
 
