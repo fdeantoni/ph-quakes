@@ -51,6 +51,18 @@ impl Hash for Quake {
     }
 }
 
+impl Ord for Quake {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.datetime.cmp(&other.datetime)
+    }
+}
+
+impl PartialOrd for Quake {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 impl Quake {
     pub fn get_datetime(&self) -> DateTime<Utc> {
         self.datetime.clone()
@@ -184,6 +196,7 @@ impl QuakeList {
 
 use std::borrow::Cow;
 use std::hash::{Hash, Hasher};
+use std::cmp::Ordering;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct QuakeError {
@@ -261,10 +274,18 @@ mod tests {
         let one = test_quake();
         let mut two = one.clone();
         two.url = "https://some.other.url".to_string();
+        let mut three = test_quake();
+        three.depth = 100;
+        let one_vec = vec![one.clone()];
+        let two_vec = vec![two.clone(), three.clone()];
         let mut set: HashSet<Quake> = HashSet::new();
-        set.insert(one);
-        set.insert(two);
-        println!("{:?}", set);
+        set.extend(one_vec);
+        set.extend(two_vec);
+        let mut sorted = set.clone().into_iter().collect::<Vec<Quake>>();
+        sorted.sort();
+        println!("{:?}", &set);
+        assert_eq!(sorted[0], one);
+        assert_eq!(sorted[1], three);
     }
 
     #[actix_rt::test]

@@ -8,6 +8,7 @@ use std::str::Utf8Error;
 use quakes_api::*;
 use crate::client::WebClient;
 use crate::parser::HtmlParser;
+use std::collections::HashSet;
 
 static PHILVOLCS_URL: &str = "https://earthquake.phivolcs.dost.gov.ph/";
 
@@ -32,9 +33,13 @@ async fn retrieve_current_month(client: &WebClient) -> Result<Vec<Quake>, Scrape
 
 pub async fn get_philvolcs_quakes() -> Result<Vec<Quake>, ScraperError> {
     let client = WebClient::new();
-    let mut quakes = retrieve_previous_month(&client).await?;
-    let mut current = retrieve_current_month(&client).await?;
-    quakes.append(&mut current);
+    let mut set: HashSet<Quake> = HashSet::new();
+    let current = retrieve_current_month(&client).await?;
+    set.extend(current);
+    let history = retrieve_previous_month(&client).await?;
+    set.extend(history);
+    let mut quakes: Vec<Quake> = set.into_iter().collect();
+    quakes.sort();
     Ok(quakes)
 }
 
