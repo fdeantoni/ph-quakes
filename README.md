@@ -11,6 +11,10 @@ and [twitter account](https://twitter.com/phivolcs_dost).
 This application makes use of both sources to gather quake data and display it on a [leaflet](https://leafletjs.com/) 
 map. It emulates the functionality the [USGS Earthquake Map](https://earthquake.usgs.gov/earthquakes/map//). 
 
+## Demo ##
+
+A running instance can be found here: [https://ph-quakes.herokuapp.com](https://ph-quakes.herokuapp.com/).
+
 ## Get it and Run it ##
 
 To run the application you will need [Rust](https://www.rust-lang.org/). Install that first. After that, run
