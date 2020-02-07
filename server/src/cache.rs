@@ -47,7 +47,7 @@ impl Handler<UpdateCache> for CacheActor {
 
             // Remove old quakes exceeding cache limit
             if self.quakes.len() > CACHE_LIMIT {
-                let number_to_remove = self.quakes.len() - CACHE_LIMIT;
+                let number_to_remove = 10;
                 debug!("Cache limit exceeded, dropping {}.", &number_to_remove);
                 self.quakes.drain(0..number_to_remove);
             }

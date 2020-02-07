@@ -1544,6 +1544,7 @@ dependencies = [
  "actix-codec",
  "actix-files",
  "actix-rt",
+ "actix-service",
  "actix-web",
  "actix-web-actors",
  "actix-web-static-files",

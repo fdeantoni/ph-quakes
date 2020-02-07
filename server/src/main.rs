@@ -16,6 +16,7 @@ use crate::cache::UpdateCache;
 
 mod websocket;
 mod cache;
+mod redirect;
 
 include!(concat!(env!("OUT_DIR"), "/generated.rs"));
 
@@ -59,8 +60,7 @@ async fn main() -> std::io::Result<()> {
     }
     env_logger::init();
 
-    let host = std::env::var("HOST").unwrap_or("127.0.0.1".to_string());
-    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+
 
     let is_test = std::env::var("TEST").is_ok();
     if is_test {
@@ -104,9 +104,16 @@ async fn main() -> std::io::Result<()> {
         }
     });
 
+
+    let host = std::env::var("HOST").unwrap_or("127.0.0.1".to_string());
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+    let https_enabled = std::env::var("HTTPS_ONLY").is_ok();
+    info!("Will redirect http to https...");
+
     HttpServer::new(move || {
         let generated = generate();
         App::new()
+            .wrap(redirect::RedirectHTTPS::default().enable(https_enabled))
             .app_data(data.clone())
             .service(actix_web_static_files::ResourceFiles::new("/static", generated))
             .service(web::resource("/").route(web::get().to(index)))
