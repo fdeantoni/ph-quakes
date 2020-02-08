@@ -11,7 +11,11 @@ let geojson = {
 };
 
 function add(json) {
-    geojson.features = geojson.features.concat(json.features);
+    geojson.features = geojson.features.concat(json.features).sort(function(a,b) {
+        const first = moment(a.properties.datetime);
+        const second = moment(b.properties.datetime);
+        return first - second;
+    });
     current.add(json);
 }
 

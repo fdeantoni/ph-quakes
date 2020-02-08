@@ -38,7 +38,19 @@ impl Handler<UpdateCache> for CacheActor {
     fn handle(&mut self, msg: UpdateCache, _: &mut Self::Context) -> Self::Result {
         let mut quakes = msg.0.clone();
         debug!("Current cache size: {}", &self.quakes.len());
-        debug!("Updates:\n{:#?}", &quakes);
+        debug!("New quakes received:\n{:#?}", &quakes);
+
+        // Do updates first
+        let mut updated_quakes = Vec::new();
+        for quake in quakes.clone() {
+            if let Some(pos) = self.quakes.iter().position(|q| q.eq(&quake)) {
+                std::mem::replace(&mut self.quakes[pos], quake.clone());
+                updated_quakes.push(quake)
+            }
+        }
+        debug!("Updates to cache:\n{:#?}", &updated_quakes);
+
+        // Now add the new ones
         quakes.retain(|quake| !self.quakes.contains(quake) );
         if !quakes.is_empty() {
 
@@ -51,9 +63,12 @@ impl Handler<UpdateCache> for CacheActor {
                 debug!("Cache limit exceeded, dropping {}.", &number_to_remove);
                 self.quakes.drain(0..number_to_remove);
             }
+        }
 
-            // Send new quakes to subscribers
-            let list = QuakeList::new(quakes);
+        // Send updates and new quakes to subscribers
+        updated_quakes.append(&mut quakes);
+        if !updated_quakes.is_empty() {
+            let list = QuakeList::new(updated_quakes);
             debug!("Sending to clients:\n{:#?}", &list);
             for session in self.sessions.iter() {
                 session.do_send(websocket::CacheUpdates(list.clone())).unwrap();

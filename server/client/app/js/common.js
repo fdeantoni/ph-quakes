@@ -24,7 +24,21 @@ class QuakeMap {
 
     static radius(magnitude, depth) {
         let size = Math.ceil(Math.exp(magnitude) / depth);
-        if(size < 5) size = 5;
+        if(size < 5) {
+            size = 5;
+        }
+        // TODO: Find a better way to do this!
+        if (depth < 2) {
+            if (magnitude > 8) {
+                size = 140;
+            } else if (magnitude > 7) {
+                size = 120;
+            } else if (magnitude > 6) {
+                size = 100;
+            } else if (magnitude > 5) {
+                size = 80;
+            }
+        }
         return size
     }
 

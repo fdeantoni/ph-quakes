@@ -46,7 +46,7 @@ async fn get_quakes() -> Vec<Quake> {
 
 fn dummy_quakes() -> Vec<Quake> {
     vec![
-        Quake::new(Utc::now(), 125.71, 9.15, 1.0, 1, "TEST".to_string(), "TEST".to_string(), "https://example.com".to_string()),
+        Quake::new(Utc::now(), 125.71, 9.15, 4.0, 1, "TEST".to_string(), "TEST".to_string(), "https://example.com".to_string()),
     ]
 }
 
@@ -59,8 +59,6 @@ async fn main() -> std::io::Result<()> {
         std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info,quakes_server=info");
     }
     env_logger::init();
-
-
 
     let is_test = std::env::var("TEST").is_ok();
     if is_test {

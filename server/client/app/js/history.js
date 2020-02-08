@@ -79,6 +79,11 @@ class HistoryMap extends QuakeMap {
             HistoryMap.updateList(e.target, map, list);
         });
 
+        map.on("moveend", function (e) {
+            console.log("Event: ", e);
+            HistoryMap.updateList(timeline, map, list);
+        });
+
         timelineControl.addTo(map);
         timelineControl.addTimelines(timeline);
 
