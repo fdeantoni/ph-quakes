@@ -46,7 +46,7 @@ async fn get_quakes() -> Vec<Quake> {
 
 fn dummy_quakes() -> Vec<Quake> {
     vec![
-        Quake::new(Utc::now(), 125.71, 9.15, 4.0, 1, "TEST".to_string(), "TEST".to_string(), "https://example.com".to_string(), "test_tweet".to_string()),
+        Quake::new(Utc::now(), 125.71, 9.15, 4.0, 1, "TEST".to_string(), "TEST".to_string(), "https://example.com".to_string(), "https://twitter.com/phivolcs_dost/status/1226620233625948160".to_string()),
     ]
 }
 
