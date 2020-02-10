@@ -10,7 +10,7 @@ const DATETIME_FORMAT: &str = "%d %B %Y - %I:%M %p %#z";
 
 type Row = HashMap<String, String>;
 
-pub struct HtmlParser(Vec<Row>);
+pub struct HtmlParser(Vec<Row>, String);
 
 impl HtmlParser {
 
@@ -73,7 +73,7 @@ impl HtmlParser {
                 };
             }
         });
-        HtmlParser(collection)
+        HtmlParser(collection, source_url)
     }
 
     fn sanitize_text(text: Text<'_>) -> Vec<&str> {
@@ -190,6 +190,7 @@ impl HtmlParser {
             let location = Self::get_location(&row)?;
             let province = Self::get_province(&row)?;
             let url = Self::get_url(&row)?;
+            let source = self.1.clone();
 
             let quake = Quake::new(
                 datetime,
@@ -199,7 +200,8 @@ impl HtmlParser {
                 depth,
                 location,
                 province,
-                url
+                url,
+                source
             );
             quakes.push(quake);
         }

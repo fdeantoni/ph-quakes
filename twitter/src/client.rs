@@ -31,11 +31,17 @@ pub(crate) struct Entities {
 }
 
 #[derive(Debug,Clone,Deserialize)]
+pub(crate) struct User {
+    screen_name: String
+}
+
+#[derive(Debug,Clone,Deserialize)]
 pub(crate) struct Tweet {
     created_at: String,
     id: u64,
     full_text: String,
     entities: Entities,
+    user: User,
 }
 
 impl Tweet {
@@ -47,6 +53,9 @@ impl Tweet {
     }
     pub fn get_tweet_id(&self) -> u64 {
         self.id
+    }
+    pub fn get_screen_name(&self) -> String {
+        self.user.screen_name.clone()
     }
 }
 
@@ -184,6 +193,9 @@ pub(crate) mod tests {
                 urls: vec![ Url {
                     expanded_url: "http://example.com".to_string()
                 }]
+            },
+            user: User {
+                screen_name: "test_tweeter".to_string()
             }
         }
     }

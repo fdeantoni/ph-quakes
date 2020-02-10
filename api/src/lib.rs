@@ -1,5 +1,6 @@
 use serde_derive::*;
 pub use chrono::prelude::*;
+
 pub mod time {
     pub use ::chrono::Duration;
 }
@@ -16,7 +17,8 @@ pub struct Quake {
     depth: u16,
     location: String,
     province: String,
-    url: String
+    url: String,
+    source: String,
 }
 
 fn format_f64(coord: &f64) -> String {
@@ -82,8 +84,11 @@ impl Quake {
     pub fn get_url(&self) -> String {
         self.url.clone()
     }
+    pub fn get_source(&self) -> String {
+        self.source.clone()
+    }
 
-    pub fn new(datetime: DateTime<Utc>, longitude: f64, latitude: f64, magnitude: f64, depth: u16, location: String, province: String, url: String) -> Quake {
+    pub fn new(datetime: DateTime<Utc>, longitude: f64, latitude: f64, magnitude: f64, depth: u16, location: String, province: String, url: String, source: String) -> Quake {
         Quake {
             datetime,
             longitude,
@@ -92,7 +97,8 @@ impl Quake {
             depth,
             location,
             province,
-            url
+            url,
+            source,
         }
     }
 
@@ -155,15 +161,15 @@ impl Quake {
         match text.rfind("(") {
             Some(pos) => {
                 let len = text.len();
-                let province = &text[pos+1..len-1];
-                let location = &text[0..pos-1];
+                let province = &text[pos + 1..len - 1];
+                let location = &text[0..pos - 1];
                 (location.to_string(), province.to_string())
-            },
+            }
             None => {
                 let location = text.clone();
                 let mut province = "";
                 if let Some(pos) = text.rfind("of ") {
-                    province = &text[pos+3..text.len()]
+                    province = &text[pos + 3..text.len()]
                 }
                 (location, province.to_string())
             }
@@ -186,10 +192,10 @@ impl QuakeList {
         let foreign_members = None;
         let features: Vec<Feature> = self.0.iter().map(|quake| quake.to_geojson_feature()).collect();
         GeoJson::FeatureCollection(FeatureCollection {
-                 bbox,
-                 features,
-                 foreign_members,
-            }
+            bbox,
+            features,
+            foreign_members,
+        }
         )
     }
 }
@@ -250,7 +256,8 @@ mod tests {
         let location = "Some location".to_string();
         let province = "Some province".to_string();
         let url = "http://example.com".to_string();
-        Quake::new(datetime, longitude, latitude, magnitude, depth, location, province, url)
+        let source = "Some source".to_string();
+        Quake::new(datetime, longitude, latitude, magnitude, depth, location, province, url, source)
     }
 
     #[test]

@@ -159,6 +159,10 @@ impl TweetParser {
         }
     }
 
+    fn get_source(screen_name: String, id: u64) -> String {
+        format!("https://twitter.com/{}/status/{}", screen_name, id)
+    }
+
     pub(crate) async fn get_quakes(&self) -> Result<Vec<Quake>, TwitterError> {
         let mut quakes: Vec<Quake> = Vec::new();
 
@@ -175,6 +179,7 @@ impl TweetParser {
                 let location = Self::get_location(&row)?;
                 let province = Self::get_province(&row)?;
                 let url = Self::get_url(tweet.get_url())?;
+                let source = Self::get_source(tweet.get_screen_name(), tweet.get_tweet_id());
 
                 let quake = Quake::new(
                     datetime,
@@ -184,7 +189,8 @@ impl TweetParser {
                     depth,
                     location,
                     province,
-                    url
+                    url,
+                    source
                 );
                 quakes.push(quake);
             } else {
