@@ -7,7 +7,7 @@ class CurrentMap extends QuakeMap {
     constructor(mapId, sidebarId, listId) {
         super(mapId, sidebarId);
 
-        this.list = document.getElementById(listId)
+        this.list = document.getElementById(listId);
 
         this.map.spin(true);
         this.initialized = false;
@@ -60,7 +60,7 @@ class CurrentMap extends QuakeMap {
 
             setTimeout(function() {
                 newItem.className = newItem.className + "quake-show";
-            }, 10);
+            }, 50);
 
         });
     }

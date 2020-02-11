@@ -10,12 +10,29 @@ let geojson = {
     type: "FeatureCollection"
 };
 
+const qa = document.getElementsByClassName("quake-alert")[0];
+const tweet = document.getElementById("quake-tweet");
+function showTweet(id) {
+    tweet.innerHTML = "";
+    twttr.widgets.createTweet(id, tweet);
+    qa.classList.add("quake-alert-show");
+    setTimeout(function() {
+        qa.classList.remove("quake-alert-show");
+    }, 4000);
+}
+
+function showLastQuake(feature) {
+    const id = feature.properties.source.split("/").pop();
+    showTweet(id);
+}
+
 function add(json) {
     geojson.features = geojson.features.concat(json.features).sort(function(a,b) {
         const first = moment(a.properties.datetime);
         const second = moment(b.properties.datetime);
         return first - second;
     });
+    showLastQuake(geojson.features.slice(-1)[0]);
     current.add(json);
 }
 

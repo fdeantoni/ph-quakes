@@ -44,7 +44,7 @@ class QuakeMap {
 
     static quakeMarker(latlng, magnitude, depth) {
         return new L.circleMarker(latlng, {
-            className: "fade-in",
+            className: "marker-fade-in",
             radius: QuakeMap.radius(magnitude, depth),
             fillColor: "#ff3b33",
             color: "#ff3b33",

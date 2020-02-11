@@ -147,6 +147,10 @@ impl Quake {
             String::from("url"),
             to_value(self.url.clone()).unwrap(),
         );
+        properties.insert(
+            String::from("source"),
+            to_value(self.source.clone()).unwrap(),
+        );
 
         Feature {
             bbox: None,

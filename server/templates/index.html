@@ -54,8 +54,8 @@
                 <h1><span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
             </div>
 
-            <ol reversed class="quake-list quake-fade quake-highlight" id="current-list"></ol>
-            <ol reversed class="quake-list quake-fade quake-highlight hide" id="history-list"></ol>
+            <ol reversed class="quake-list quake-fade-in quake-highlight" id="current-list"></ol>
+            <ol reversed class="quake-list quake-fade-in quake-highlight hide" id="history-list"></ol>
         </div>
 
         <div class="sidebar-pane" id="about">
@@ -88,25 +88,29 @@
 
     <div class="sidebar-map hide" id="history-map"></div>
 
+    <div class='quake-alert'>
+        <div id="quake-tweet"></div>
+    </div>
+
 </div>
 
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js'></script>
+<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.27/moment-timezone-with-data.min.js"></script>
 
+<script type='text/javascript' src='static/timeline/leaflet.timeline.js'></script>
 
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-            crossorigin=""></script>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js'></script>
-    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.27/moment-timezone-with-data.min.js"></script>
+<script type='text/javascript' src="/static/sidebar/leaflet-sidebar.min.js"></script>
 
-    <script type='text/javascript' src='static/timeline/leaflet.timeline.js'></script>
+<script type='text/javascript' src="/static/spin/leaflet.spin.min.js"></script>
+<script type='text/javascript' src="/static/spin/spin.min.js"></script>
 
-    <script type='text/javascript' src="/static/sidebar/leaflet-sidebar.min.js"></script>
+<script type='text/javascript' src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-    <script type='text/javascript' src="/static/spin/leaflet.spin.min.js"></script>
-    <script type='text/javascript' src="/static/spin/spin.min.js"></script>
-
-    <script type='text/javascript' src='static/quakes/quakes.js'></script>
+<script type='text/javascript' src='static/quakes/quakes.js'></script>
 
 
 </body>
