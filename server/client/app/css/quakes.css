@@ -40,6 +40,8 @@ html, body  {
 .quake-alert {
     position: fixed;
     z-index: 1000;
+    min-width: 350px;
+    min-height: 400px;
     right: 0.5%;
     bottom: 2.5%;
     animation: fadeout 1s linear;
@@ -168,17 +170,4 @@ html, body  {
 @keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; }
-}
-
-.rab {
-    position: fixed;
-    z-index: 1000;
-    left: 50%;
-    top: 50%;
-    width: 200px;
-    height: 30px;
-    outline: 0;
-    border: 0;
-    color: white;
-    background: #039b73;
 }
