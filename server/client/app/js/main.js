@@ -14,7 +14,7 @@ const qa = document.getElementsByClassName("quake-alert")[0];
 const tweet = document.getElementById("quake-tweet");
 function showTweet(id) {
     tweet.innerHTML = "";
-    twttr.widgets.createTweet(id, tweet);
+    twttr.widgets.createTweet(id, tweet, { conversation: 'none' } );
     qa.classList.add("quake-alert-show");
     setTimeout(function() {
         qa.classList.remove("quake-alert-show");
