@@ -4,7 +4,8 @@ class QuakeMap {
         this.map = L.map(mapId, {
             center: [15.5, 120.91],
             zoom: 7,
-            maxZoom: 18
+            maxZoom: 18,
+            zoomControl: false
         });
 
         const mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
@@ -20,6 +21,10 @@ class QuakeMap {
         L.tileLayer(mapboxUrl, mapboxConfig).addTo(this.map);
 
         L.control.sidebar(sidebarId).addTo(this.map);
+
+        L.control.zoom({
+            position: 'topright'
+        }).addTo(this.map);
     }
 
     static radius(magnitude, depth) {
