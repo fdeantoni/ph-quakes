@@ -14,11 +14,18 @@ const qa = document.getElementsByClassName("quake-alert")[0];
 const tweet = document.getElementById("quake-tweet");
 function showTweet(id) {
     tweet.innerHTML = "";
+    qa.style.display = 'none';
     twttr.widgets.createTweet(id, tweet, { conversation: 'none' } );
-    qa.classList.add("quake-alert-show");
     setTimeout(function() {
-        qa.classList.remove("quake-alert-show");
-    }, 4000);
+        qa.style.display = 'inline';
+        qa.classList.add("quake-alert-show");
+        setTimeout(function() {
+            qa.classList.remove("quake-alert-show");
+            setTimeout(function() {
+                qa.style.display = 'none';
+            },1000);
+        }, 4000);
+    }, 1000);
 }
 
 function showLastQuake(feature) {
