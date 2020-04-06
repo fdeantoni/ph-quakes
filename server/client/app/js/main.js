@@ -15,7 +15,11 @@ const tweet = document.getElementById("quake-tweet");
 function showTweet(id) {
     tweet.innerHTML = "";
     qa.style.display = 'none';
-    twttr.widgets.createTweet(id, tweet, { conversation: 'none' } );
+    var options = { conversation: 'none' };
+    if(window.innerWidth < 800) {
+        options['cards'] = 'hidden';
+    }
+    twttr.widgets.createTweet(id, tweet, options );
     setTimeout(function() {
         qa.style.display = 'inline';
         qa.classList.add("quake-alert-show");

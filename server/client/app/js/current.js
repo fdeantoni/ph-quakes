@@ -63,6 +63,11 @@ class CurrentMap extends QuakeMap {
             }, 50);
 
         });
+
+        if(displayed.length > 0) {
+            const latest = displayed[displayed.length - 1];
+            map.flyTo(latest.getLatLng(), 7);
+        }
     }
 
     static clusterIcon(size, text) {
