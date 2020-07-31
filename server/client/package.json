@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/fdeantoni/ph-quakes#readme",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
     "cssnano": "^4.1.10",
@@ -37,9 +37,9 @@
     "leaflet-sidebar-v2": "^1.1.1",
     "leaflet-spin": "^1.1.2",
     "leaflet.markercluster": "^1.4.1",
-    "leaflet.timeline": "^1.4.2",
-    "moment": "^2.24.0",
-    "moment-timezone": "^0.5.28"
+    "leaflet.timeline": "^1.4.3",
+    "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31"
   },
   "browserslist": [
     "defaults"
