@@ -88,7 +88,7 @@ impl TwitterClient {
             self.token = self.get_token().await?
         }
 
-        let path = "/1.1/statuses/user_timeline.json";
+        let path = "1.1/statuses/user_timeline.json";
         let parameters = format!("tweet_mode=extended&screen_name={}", screen_name);
 
         let uri = if last_tweet_id.is_none() {
@@ -96,6 +96,8 @@ impl TwitterClient {
         } else {
             format!("{}/{}?{}&since_id={}", self.url, path, parameters, last_tweet_id.unwrap())
         };
+
+        debug!("URI: {}", &uri);
 
         let mut response = self.client.get(uri)
             .header("User-Agent", "ph-quakes")
@@ -105,7 +107,12 @@ impl TwitterClient {
         let bytes = response.body().limit(10_000_000).await?.to_vec();
         let string = std::str::from_utf8(&bytes)?;
 
-        let tweets: Vec<Tweet> = serde_json::from_str(string).unwrap();
+        let tweets: Vec<Tweet> = serde_json::from_str(string).map_err( |error| {
+            TwitterError::new(format!(
+                "JSON decoding error: {}\nstring: {}",
+                error.to_string(), string
+            ))
+        })?;
 
         debug!("Tweets retrieved:\n{:#?}", &tweets);
 
@@ -146,6 +153,7 @@ pub(crate) mod tests {
     static mut CLIENT: Option<TwitterClient> = None;
 
     fn init() -> TwitterClient {
+
         unsafe {
             INIT.call_once(|| {
                 dotenv().ok();

@@ -44,7 +44,7 @@ impl Handler<UpdateCache> for CacheActor {
         let mut updated_quakes = Vec::new();
         for quake in quakes.clone() {
             if let Some(pos) = self.quakes.iter().position(|q| q.eq(&quake)) {
-                std::mem::replace(&mut self.quakes[pos], quake.clone());
+                let _ = std::mem::replace(&mut self.quakes[pos], quake.clone());
                 updated_quakes.push(quake)
             }
         }

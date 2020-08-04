@@ -123,7 +123,7 @@ impl From<awc::error::SendRequestError> for TwitterError {
 impl From<Utf8Error> for TwitterError {
     fn from(error: Utf8Error) -> Self {
         TwitterError::new(format!(
-            "Scraper decoding error: {}",
+            "Twitter decoding error: {}",
             error.to_string()
         ))
     }
@@ -145,5 +145,4 @@ mod tests {
         let quakes = twitter.start().await.unwrap();
         println!("{:#?}", quakes);
     }
-
 }

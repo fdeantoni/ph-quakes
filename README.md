@@ -24,6 +24,27 @@ the following:
     $ cd ph-quakes/server
     $ cargo run 
 
+## Development ##
+
+The Javascript client uses  `gulp` to minify and deploy the sources. Run it as follows:
+
+    $ cd ph-quakes/server/client
+    $ gulp build
+    
+Once the updated javascript resources have been built and deployed, you can run the server as follows:
+
+    $ cd .. # back to ph-quakes/server
+    $ RUST_LOG=actix_server=info,actix_web=info,quakes_server=debug cargo run    
+
+The `quakes-server` should now be running at [http://localhost:8080].
+
+To run the server with dummy data so as not to make any API calls from `quakes-scraper` and `quakes-twitter`,
+pass the `TEST` env variable, i.e.:
+
+    $ TEST=true cargo run
+    
+This will generate a dummy quake every 10 seconds.     
+
 ## Leaflet Plugins ##
 
 Besides Leaflet, this project also makes use of the following Leaflet plugins:

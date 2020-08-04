@@ -33,8 +33,12 @@ function showTweet(id) {
 }
 
 function showLastQuake(feature) {
-    const id = feature.properties.source.split("/").pop();
-    showTweet(id);
+    console.log(feature);
+    const source = feature.properties.source;
+    if(source.startsWith("https://twitter.com/")) {
+        const id = source.split("/").pop();
+        showTweet(id);
+    }
 }
 
 function add(json) {
