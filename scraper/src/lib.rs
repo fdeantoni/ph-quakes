@@ -4,11 +4,12 @@ pub mod parser;
 use awc;
 use std::borrow::Cow;
 use std::str::Utf8Error;
+use std::collections::HashSet;
 
 use quakes_api::*;
 use crate::client::WebClient;
 use crate::parser::HtmlParser;
-use std::collections::HashSet;
+
 
 static PHIVOLCS_URL: &str = "https://earthquake.phivolcs.dost.gov.ph/";
 
@@ -114,6 +115,8 @@ mod tests {
 
     #[actix_rt::test] #[ignore]
     async fn retrieve_phivolcs_quakes() {
+        std::env::set_var("RUST_LOG", "quakes_scraper=debug");
+        env_logger::init();
         let quakes = get_phivolcs_quakes().await.unwrap();
         println!("{:?}", &quakes);
         println!("{}", &quakes.len());

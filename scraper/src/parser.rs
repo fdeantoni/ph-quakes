@@ -1,5 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::FromIterator;
+use log::*;
 
 use quakes_api::*;
 
@@ -107,7 +108,7 @@ impl HtmlParser {
         if text.is_some() {
             let value = text.unwrap();
             value.parse::<f64>().map_err(|error| {
-                ScraperError::new(format!("Trouble converting {} to f64: {}", value, error.to_string()))
+                ScraperError::new(format!("Trouble converting {} to Longitude (f64): {}", value, error.to_string()))
             })
         } else {
             Err(ScraperError::new("Longitude not found in row!"))
@@ -119,7 +120,7 @@ impl HtmlParser {
         if text.is_some() {
             let value = text.unwrap();
             value.parse::<f64>().map_err(|error| {
-                ScraperError::new(format!("Trouble converting {} to f64: {}", value, error.to_string()))
+                ScraperError::new(format!("Trouble converting {} to Latitude (f64): {}", value, error.to_string()))
             })
         } else {
             Err(ScraperError::new("Latitude not found in row!"))
@@ -131,7 +132,7 @@ impl HtmlParser {
         if text.is_some() {
             let value = text.unwrap();
             value.parse::<f64>().map_err(|error| {
-                ScraperError::new(format!("Trouble converting {} to f64: {}", value, error.to_string()))
+                ScraperError::new(format!("Trouble converting {} to Magnitude (f64): {}", value, error.to_string()))
             })
         } else {
             Err(ScraperError::new("Mag not found in row!"))
@@ -143,7 +144,7 @@ impl HtmlParser {
         if text.is_some() {
             let value = text.unwrap();
             value.parse::<u16>().map_err(|error| {
-                ScraperError::new(format!("Trouble converting {} to i8: {}", value, error.to_string()))
+                ScraperError::new(format!("Trouble converting {} to Depth (i8): {}", value, error.to_string()))
             })
         } else {
             Err(ScraperError::new("Depth not found in row!"))
@@ -177,34 +178,44 @@ impl HtmlParser {
         }
     }
 
+    fn process_row(&self, row: &Row) -> Result<Quake, ScraperError> {
+        let datetime = Self::get_datetime(&row)?;
+        let longitude = Self::get_longitude(&row)?;
+        let latitude = Self::get_latitude(&row)?;
+        let magnitude = Self::get_magnitude(&row)?;
+        let depth = Self::get_depth(&row)?;
+        let location = Self::get_location(&row)?;
+        let province = Self::get_province(&row)?;
+        let url = Self::get_url(&row)?;
+        let source = self.1.clone();
+
+        let quake = Quake::new(
+            datetime,
+            longitude,
+            latitude,
+            magnitude,
+            depth,
+            location,
+            province,
+            url,
+            source
+        );
+        Ok(quake)
+    }
+
     pub async fn get_quakes(&self) -> Result<Vec<Quake>, ScraperError> {
         let mut quakes = Vec::new();
 
         for row in self.0.clone() {
 
-            let datetime = Self::get_datetime(&row)?;
-            let longitude = Self::get_longitude(&row)?;
-            let latitude = Self::get_latitude(&row)?;
-            let magnitude = Self::get_magnitude(&row)?;
-            let depth = Self::get_depth(&row)?;
-            let location = Self::get_location(&row)?;
-            let province = Self::get_province(&row)?;
-            let url = Self::get_url(&row)?;
-            let source = self.1.clone();
-
-            let quake = Quake::new(
-                datetime,
-                longitude,
-                latitude,
-                magnitude,
-                depth,
-                location,
-                province,
-                url,
-                source
-            );
-            quakes.push(quake);
+            match self.process_row(&row) {
+                Ok(quake) => quakes.push(quake),
+                Err(error) => {
+                    warn!("Could not convert following row into a Quake:\n{:#?}\n{}", row, error.description)
+                }
+            }
         }
+        info!("Scraped {} quakes from {}", quakes.len(), self.1);
         Ok(quakes)
     }
 
