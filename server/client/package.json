@@ -17,10 +17,10 @@
   },
   "homepage": "https://github.com/fdeantoni/ph-quakes#readme",
   "devDependencies": {
-    "@babel/core": "^7.11.0",
-    "@babel/preset-env": "^7.11.0",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "babelify": "^10.0.0",
-    "browserify": "^16.5.1",
+    "browserify": "^16.5.2",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
@@ -30,10 +30,11 @@
     "gulp-uglify": "^3.0.2",
     "gulplog": "^1.0.0",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "bl": ">=1.2.3"
   },
   "dependencies": {
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.7.1",
     "leaflet-sidebar-v2": "^1.1.1",
     "leaflet-spin": "^1.1.2",
     "leaflet.markercluster": "^1.4.1",
